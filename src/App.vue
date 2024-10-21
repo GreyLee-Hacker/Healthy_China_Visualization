@@ -1,11 +1,5 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">首页</router-link> |
-      <router-link to="/basic-data">基础数据</router-link> |
-      <router-link to="/evaluation-indicators">评估指标</router-link>
-      <!-- 添加其他导航链接 -->
-    </nav>
     <router-view />
   </div>
 </template>

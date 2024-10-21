@@ -1,12 +1,11 @@
 <template>
     <div class="basic-data-container">
-        <div class="basic-data">
-            <h2>基础数据</h2>
-            <ul>
-                <li v-for="(value, key) in basicData" :key="key">
-                    {{ key }}: {{ value }}
-                </li>
-            </ul>
+        <h2>基础数据</h2>
+        <div class="data-list">
+            <div class="data-item" v-for="(value, key) in basicData" :key="key">
+                <span class="data-label">{{ key }}</span>
+                <span class="data-value">{{ value }}</span>
+            </div>
         </div>
     </div>
 </template>
@@ -31,20 +30,39 @@ export default {
 <style scoped>
 .basic-data-container {
     width: 100%;
-    /* 可以设置具体的像素值,如 300px */
     height: 180px;
     /* 您可以调整这个值 */
-    overflow-y: auto;
+    /* overflow-y: auto; */
     padding: 10px;
     box-sizing: border-box;
+    background-color: rgba(0, 255, 255, 0.1);
+    border: 1px solid #00ffff;
+    border-radius: 5px;
 }
 
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-li {
+h2 {
+    font-size: 16px;
     margin-bottom: 10px;
+    color: #00ffff;
+}
+
+.data-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.data-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.data-label {
+    color: #ffffff;
+}
+
+.data-value {
+    color: #00ffff;
+    font-weight: bold;
 }
 </style>

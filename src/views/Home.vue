@@ -1,33 +1,36 @@
 <template>
     <div class="dashboard">
-        <h1 class="dashboard-title">政务服务大数据可视化监管平台</h1>
+        <h1 class="dashboard-title">健康中国建设追踪评估可视化平台</h1>
         <div class="dashboard-content">
             <div class="left-section">
                 <div class="top-row">
                     <div class="basic-data">
                         <BasicData />
-                        <!-- <h2>基础数据</h2> -->
-                        <!-- <div id="basic-data-chart"></div> -->
                     </div>
-                    <div class="evaluation-indicators">
-                        <h2>评估指标</h2>
-                        <div id="indicators-chart"></div>
+                    <div class="network-preview" @click="expandModule('network')">
+                        <h2>部门协同网络</h2>
+                        <div id="network-chart"></div>
+                        <!-- 添加网格图的预览 -->
+                        <div class="grid-preview">
+                            <!-- 这里可以放置网格图的内容 -->
+                            <p>网格图预览</p>
+                        </div>
                     </div>
                 </div>
                 <div class="main-content">
                     <div class="left-column">
                         <div class="modules-preview">
                             <div class="module-card" v-for="module in modules" :key="module.id"
-                                @click="expandModule(module.id)">
+                                @mouseover="updateDimension(module.id)" @click="expandModule(module.id)">
                                 <h2>{{ module.name }}</h2>
                                 <div class="chart-preview" :id="'chart-' + module.id"></div>
                             </div>
                         </div>
+
                     </div>
                     <div class="center-column">
-                        <div class="network-preview" @click="expandModule('network')">
-                            <h2>部门协同网络</h2>
-                            <div id="network-chart"></div>
+                        <div class="evaluation-indicators">
+                            <EvaluationIndicators :current-dimension="currentDimension" />
                         </div>
                     </div>
                 </div>
@@ -36,6 +39,11 @@
                 <div class="policy-tree-preview" @click="expandModule('policy-tree')">
                     <h2>政策树</h2>
                     <div id="policy-tree-chart"></div>
+                    <!-- 添加树状图的预览 -->
+                    <div class="tree-preview">
+                        <!-- 这里可以放置树状图的内容 -->
+                        <p>树状图预览</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -43,21 +51,25 @@
         <div v-if="expandedModule" class="expanded-module">
             <button @click="closeExpandedModule">返回</button>
             <div :id="'expanded-' + expandedModule"></div>
+            <p>功能开发中 敬请期待</p>
         </div>
     </div>
 </template>
 
 <script>
 import * as echarts from 'echarts';
-import BasicData from './BasicData.vue';
+import BasicData from '@/views/BasicData.vue';
+import EvaluationIndicators from '@/views/EvaluationIndicators.vue';
 
 export default {
     name: 'HomePage',
     components: {
-        BasicData
+        BasicData,
+        EvaluationIndicators
     },
     data() {
         return {
+            currentDimension: null, // 当前选中的维度
             modules: [
                 { id: 'central', name: '中央维度' },
                 { id: 'provincial', name: '省级维度' },
@@ -123,6 +135,9 @@ export default {
         getExpandedChartOption(moduleId) {
             // 返回展开后的大图表配置
             return {};
+        },
+        updateDimension(dimension) {
+            this.currentDimension = dimension; // 更新当前维度
         }
     }
 }
@@ -162,11 +177,10 @@ export default {
     display: flex;
     gap: 20px;
     margin-bottom: 20px;
-    /* height: 200px; */
-    /* 减小高度 */
 }
 
-.basic-data {
+.basic-data,
+.evaluation-indicators {
     flex: 1;
 }
 
@@ -177,11 +191,6 @@ export default {
     border: 1px solid #00ffff;
     border-radius: 5px;
     padding: 10px;
-}
-
-.basic-data,
-.evaluation-indicators {
-    flex: 1;
 }
 
 .main-content {
