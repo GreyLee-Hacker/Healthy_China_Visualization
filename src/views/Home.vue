@@ -7,30 +7,28 @@
                     <div class="basic-data">
                         <BasicData />
                     </div>
-                    <div class="network-preview" @click="expandModule('network')">
-                        <h2>部门协同网络</h2>
-                        <div id="network-chart"></div>
-                        <!-- 添加网格图的预览 -->
-                        <div class="grid-preview">
-                            <!-- 这里可以放置网格图的内容 -->
-                            <p>网格图预览</p>
-                        </div>
-                    </div>
                 </div>
                 <div class="main-content">
                     <div class="left-column">
                         <div class="modules-preview">
                             <div class="module-card" v-for="module in modules" :key="module.id"
-                                @mouseover="updateDimension(module.id)" @click="expandModule(module.id)">
+                                @mouseover="showEvaluationIndicators(module.id)"
+                                @mouseleave="hideEvaluationIndicators()" @click="expandModule(module.id)">
                                 <h2>{{ module.name }}</h2>
-                                <div class="chart-preview" :id="'chart-' + module.id"></div>
+                                <component :is="module.object" :data="module.id === 'central' ? centralData : []" />
+                                <div class="chart-preview" :id="'chart-' + module.id">
+                                    <!-- <ProvincialMap v-if="module.id === 'provincial'" /> -->
+                                </div>
                             </div>
                         </div>
-
                     </div>
                     <div class="center-column">
-                        <div class="evaluation-indicators">
-                            <EvaluationIndicators :current-dimension="currentDimension" />
+                        <div class="network-preview" @click="expandModule('network')">
+                            <h2>部门协同网络</h2>
+                            <div id="network-chart"></div>
+                            <div class="grid-preview">
+                                <p>网格图预览</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -39,19 +37,21 @@
                 <div class="policy-tree-preview" @click="expandModule('policy-tree')">
                     <h2>政策树</h2>
                     <div id="policy-tree-chart"></div>
-                    <!-- 添加树状图的预览 -->
                     <div class="tree-preview">
-                        <!-- 这里可以放置树状图的内容 -->
                         <p>树状图预览</p>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- 显示评估指标 -->
+        <div v-if="currentDimension" class="evaluation-indicators-popup">
+            <EvaluationIndicators :current-dimension="currentDimension" />
+        </div>
         <!-- 展开的模块 -->
         <div v-if="expandedModule" class="expanded-module">
             <button @click="closeExpandedModule">返回</button>
             <div :id="'expanded-' + expandedModule"></div>
-            <p>功能开发中 敬请期待</p>
+            <p>功能开发中，敬请期待</p>
         </div>
     </div>
 </template>
@@ -60,29 +60,56 @@
 import * as echarts from 'echarts';
 import BasicData from '@/views/BasicData.vue';
 import EvaluationIndicators from '@/views/EvaluationIndicators.vue';
+import CentralDimension from '@/views/CentralDimension.vue';
+import ProvincialDimension from '@/views/ProvincialDimension.vue';
+import DepartmentalDimension from '@/views/DepartmentDimension.vue';
+import ActionDimension from '@/views/ActionDimension.vue';
 
 export default {
     name: 'HomePage',
     components: {
         BasicData,
-        EvaluationIndicators
+        EvaluationIndicators,
     },
     data() {
         return {
             currentDimension: null, // 当前选中的维度
             modules: [
-                { id: 'central', name: '中央维度' },
-                { id: 'provincial', name: '省级维度' },
-                { id: 'departmental', name: '部门维度' },
-                { id: 'action', name: '行动维度' }
+                { id: 'central', name: '中央维度', object: CentralDimension },
+                { id: 'provincial', name: '省级维度', object: ProvincialDimension },
+                { id: 'departmental', name: '部门维度', object: DepartmentalDimension },
+                { id: 'action', name: '行动维度', object: ActionDimension }
             ],
-            expandedModule: null
+            expandedModule: null,
+            centralData: [ // 定义中央维度的数据
+                { year: '2020', score: 75 },
+                { year: '2021', score: 80 },
+                { year: '2022', score: 85 },
+                { year: '2023', score: 90 }
+            ]
         }
     },
-    mounted() {
-        this.initCharts();
-    },
     methods: {
+        showEvaluationIndicators(moduleId) {
+            this.currentDimension = moduleId; // 更新当前维度
+        },
+        hideEvaluationIndicators() {
+            this.currentDimension = null; // 隐藏评估指标
+        },
+        expandModule(moduleId) {
+            this.expandedModule = moduleId;
+            this.$nextTick(() => {
+                const expandedChart = echarts.init(document.getElementById(`expanded-${moduleId}`));
+                expandedChart.setOption(this.getExpandedChartOption(moduleId));
+            });
+        },
+        closeExpandedModule() {
+            this.expandedModule = null;
+        },
+        getExpandedChartOption(moduleId) {
+            // 返回展开后的大图表配置
+            return {};
+        },
         initCharts() {
             this.modules.forEach(module => {
                 this.initModuleChart(module.id);
@@ -121,23 +148,6 @@ export default {
                     areaStyle: { color: 'rgba(0, 255, 255, 0.2)' }
                 }]
             };
-        },
-        expandModule(moduleId) {
-            this.expandedModule = moduleId;
-            this.$nextTick(() => {
-                const expandedChart = echarts.init(document.getElementById(`expanded-${moduleId}`));
-                expandedChart.setOption(this.getExpandedChartOption(moduleId));
-            });
-        },
-        closeExpandedModule() {
-            this.expandedModule = null;
-        },
-        getExpandedChartOption(moduleId) {
-            // 返回展开后的大图表配置
-            return {};
-        },
-        updateDimension(dimension) {
-            this.currentDimension = dimension; // 更新当前维度
         }
     }
 }
@@ -257,6 +267,25 @@ h2 {
 #policy-tree-chart,
 #indicators-chart {
     flex-grow: 1;
+}
+
+.evaluation-indicators-popup {
+    position: fixed;
+    /* 或者使用 absolute */
+    top: 20px;
+    /* 根据需要调整位置 */
+    left: 50%;
+    /* 根据需要调整位置 */
+    transform: translateX(-50%);
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 400px;
+    /* 根据需要设置最大宽度 */
+    overflow: auto;
+    /* 如果内容超出，允许滚动 */
 }
 
 .expanded-module {
