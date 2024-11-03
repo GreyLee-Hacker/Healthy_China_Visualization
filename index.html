@@ -210,12 +210,13 @@
         <div class="boxall" style="height:100%">
           <div class="alltitle">中央维度
             <div class="pulll_right sebtn">
-              <a href="javascript:void(0)" class="active" onclick="switchView('政策数量')">政策数量</a>
+              <a href="javascript:void(0)" class="active" onclick="switchView('总得分')">总得分</a>
+              <a href="javascript:void(0)" onclick="switchView('政策数量')">政策数量</a>
               <a href="javascript:void(0)" onclick="switchView('政策质量')">政策质量</a>
               <a href="javascript:void(0)" onclick="switchView('协同机制')">协同机制</a>
             </div>
           </div>
-          <div class="boxnav" id="echart4" style="width: 100%; height: 400px;"></div>
+          <div class="boxnav" id="echart4" style="width: 100%; height: 200px;"></div>
           <div class="boxfoot"></div>
         </div>
       </li>
@@ -232,7 +233,7 @@
     $(function () {
       $('.wrap,.adduser').liMarquee({
         direction: 'up',//身上滚动 
-        runshort: false,//内容不足时不滚动
+        runshort: false,//内��不足时不滚动
         scrollamount: 20//速度
       });
     });
@@ -245,88 +246,168 @@
   </script>
 
   <script>
-    // 初始化 ECharts 实例
-    var myChart = echarts.init(document.getElementById('echart4'));
-
-    // 数据定义
+    var myChart = null;
+    
+    // 数据定义 - 确保包含所有年份
     var data = [
-      { "年份": "2016年", "政策数量": 24.2529, "政策质量": 49.5486, "协同机制": 59.8673 },
-      { "年份": "2017年", "政策数量": 28.0691, "政策质量": 61.1064, "协同机制": 44.919 },
-      { "年份": "2018年", "政策数量": 30.1834, "政策质量": 61.1064, "协同机制": 56.5327 },
-      { "年份": "2019年", "政策数量": 54.1496, "政策质量": 61.3241, "协同机制": 64.3206 },
-      { "年份": "2020年", "政策数量": 93.0057, "政策质量": 73.8645, "协同机制": 57.8926 },
-      { "年份": "2021年", "政策数量": 73.8937, "政策质量": 84.9305, "协同机制": 61.993 },
-      { "年份": "2022年", "政策数量": 75.4344, "政策质量": 92.5849, "协同机制": 62.1522 },
-      { "年份": "2023年", "政策数量": 81.9258, "政策质量": 97.3474, "协同机制": 77.4845 }
+        { "年份": "2016年", "健康中国建设发展测度指数": 41.9978584275, "政策数量": 24.2529053219, "政策质量": 49.548572971, "协同机制": 59.8673247292 },
+        { "年份": "2017年", "健康中国建设发展测度指数": 39.1809892548, "政策数量": 28.0691106009, "政策质量": 61.1064357826, "协同机制": 44.9190013932 },
+        { "年份": "2018年", "健康中国建设发展测度指数": 44.569907586, "政策数量": 30.1833758144, "政策质量": 61.1064357826, "协同机制": 56.5327288563 },
+        { "年份": "2019年", "健康中国建设发展测度指数": 58.1998540941, "政策数量": 54.1496466337, "政策质量": 61.3240866555, "协同机制": 64.3206112561 },
+        { "年份": "2020年", "健康中国建设发展测度指数": 71.8425803002, "政策数量": 93.0057470726, "政策质量": 73.8645356701, "协同机制": 57.8925584476 },
+        { "年份": "2021年", "健康中国建设发展测度指数": 67.3875817514, "政策数量": 73.8936942405, "政策质量": 84.9304809287, "协同机制": 61.9930132046 },
+        { "年份": "2022年", "健康中国建设发展测度指数": 68.0808548686, "政策数量": 75.4343704986, "政策质量": 92.5848505098, "协同机制": 62.1521907227 },
+        { "年份": "2023年", "健康中国建设发展测度指数": 81.5569409048, "政策数量": 81.9258155176, "政策质量": 97.3474325483, "协同机制": 77.4844711643 }
     ];
 
-    // 提取年份
-    var years = data.map(item => item["年份"]);
+    // 页面加载完成后初始化
+    $(document).ready(function() {
+        // 初始化图表实例
+        myChart = echarts.init(document.getElementById('echart4'));
+        
+        // 将 switchView 函数暴露到全局作用域
+        window.switchView = switchView;
 
-    // 切换视图的函数
-    function switchView(type) {
-      // 更新激活状态的样式
-      document.querySelectorAll('.sebtn a').forEach(a => {
-        a.classList.remove('active');
-        if (a.textContent === type) {
-          a.classList.add('active');
-        }
-      });
+        // 初始显示总得分
+        switchView('总得分');
 
-      // 获取对应的数据
-      var seriesData = data.map(item => item[type]);
+        // 监听窗口大小变化
+        window.addEventListener('resize', function () {
+            if (myChart) {
+                myChart.resize();
+            }
+        });
+    });
 
-      // 更新图表配置
-      var option = {
-        title: {
-          text: type + '随年份的变化趋势',
-          left: 'center'
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross'
-          }
-        },
-        xAxis: {
-          type: 'category',
-          data: years,
-          name: '年份'
-        },
-        yAxis: {
-          type: 'value',
-          name: type
-        },
-        series: [{
-          name: type,
-          type: 'line',
-          data: seriesData,
-          smooth: true,
-          markPoint: {
-            data: [
-              { type: 'max', name: '最大值' },
-              { type: 'min', name: '最小值' }
-            ]
-          },
-          markLine: {
-            data: [
-              { type: 'average', name: '平均值' }
-            ]
-          }
-        }]
-      };
+    function getOption(type) {
+        const dataKey = type === '总得分' ? '健康中国建设发展测度指数' : type;
+        const seriesData = data.map(item => item[dataKey]);
+        const years = data.map(item => item["年份"]);
 
-      // 使用配置项显示图表
-      myChart.setOption(option);
+        return {
+            title: {
+                text: type,
+                textStyle: {
+                    color: '#fff',
+                    fontSize: '16'
+                },
+                left: 'center',
+                top: '2%'
+            },
+            grid: {
+                top: '15%',
+                left: '3%',
+                right: '4%',
+                bottom: '10%',
+                containLabel: true
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
+            },
+            legend: {
+                data: [type],
+                textStyle: {
+                    color: 'rgba(255,255,255,.6)'
+                },
+                top: '5%',
+                right: '3%'
+            },
+            xAxis: {
+                type: 'category',
+                data: years,
+                axisLabel: {
+                    show: true,
+                    interval: 0,  // 强制显示所有标签
+                    color: 'rgba(255,255,255,.6)',
+                    rotate: 45    // 旋转标签，防止重叠
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: 'rgba(255,255,255,.2)'
+                    }
+                },
+                axisTick: {
+                    alignWithLabel: true
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: type === '总得分' ? '指数' : '数值',
+                nameTextStyle: {
+                    color: 'rgba(255,255,255,.6)'
+                },
+                axisLabel: {
+                    color: 'rgba(255,255,255,.6)'
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: 'rgba(255,255,255,.2)'
+                    }
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: 'rgba(255,255,255,.1)',
+                        type: 'dashed'
+                    }
+                }
+            },
+            series: [{
+                name: type,
+                type: 'line',
+                data: seriesData,
+                smooth: true,
+                symbol: 'circle',
+                symbolSize: 8,
+                itemStyle: {
+                    color: '#62c98d',
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                },
+                lineStyle: {
+                    color: '#62c98d',
+                    width: 2
+                },
+                areaStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [{
+                            offset: 0,
+                            color: 'rgba(98,201,141,0.5)'
+                        }, {
+                            offset: 1,
+                            color: 'rgba(98,201,141,0.1)'
+                        }]
+                    }
+                }
+            }]
+        };
     }
 
-    // 初始显示政策数量的图表
-    switchView('政策数量');
+    function switchView(type) {
+        // 更新按钮状态
+        document.querySelectorAll('.sebtn a').forEach(a => {
+            a.classList.remove('active');
+            if (a.textContent === type) {
+                a.classList.add('active');
+            }
+        });
 
-    // 监听窗口大小变化，调整图表大小
-    window.addEventListener('resize', function () {
-      myChart.resize();
-    });
+        // 更新图表
+        if (myChart) {
+            myChart.clear();  // 清除旧的图表
+            myChart.setOption(getOption(type));
+        }
+    }
   </script>
 </body>
 
