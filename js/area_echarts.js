@@ -34,9 +34,8 @@ $(function () {
 
         // 监听地图的点击事件
         myChart.on('click', function (params) {
-            if (params.componentType === 'geo') {
-                var provinceName = params.name;
-                showPopup(provinceName);
+            if (params.name) {
+                createProvincePopup(params.name);
             }
         });
 
@@ -45,81 +44,226 @@ $(function () {
         });
     }
 
-    function showPopup(provinceName) {
-        // 创建一个弹出框
-        var popup = document.createElement('div');
-        popup.style.position = 'fixed';
-        popup.style.left = '10%';
-        popup.style.top = '0';
-        popup.style.width = '80%';
-        popup.style.height = '80%';
-        popup.style.backgroundColor = 'rgba(30, 50, 100, 0.9)'; // 更深的蓝色
-        popup.style.color = '#fff';
-        popup.style.padding = '20px';
-        popup.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
-        popup.style.zIndex = '1000';
-        popup.style.backdropFilter = 'blur(5px)'; // 背景虚化
-        popup.style.borderRadius = '10px'; // 圆角
-        popup.style.cursor = 'move'; // 鼠标指针变为移动样式
-        popup.style.display = 'flex';
-        popup.style.flexDirection = 'column';
-        popup.style.justifyContent = 'flex-start';
-        popup.style.alignItems = 'center';
-        popup.innerHTML = `<h1 style="font-size: 28px; margin: 20px 0; font-family: KaiTi; color: #fff;">${provinceName}</h1>`;
+    function createProvincePopup(province) {
+        // 创建弹出框
+        let popupDiv = document.createElement('div');
+        popupDiv.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 60%;
+            background: rgba(0,19,42,0.9);
+            border: 1px solid rgba(255,255,255,.2);
+            z-index: 1000;
+            padding: 20px;
+            border-radius: 10px;
+        `;
 
         // 添加关闭按钮
-        var closeButton = document.createElement('span');
-        closeButton.innerHTML = '&times;'; // 叉叉形状
-        closeButton.style.position = 'absolute';
-        closeButton.style.top = '10px';
-        closeButton.style.right = '10px';
-        closeButton.style.fontSize = '24px';
-        closeButton.style.color = '#ffeb7b';
-        closeButton.style.cursor = 'pointer';
-        closeButton.onclick = function () {
-            document.body.removeChild(popup);
-        };
-        popup.appendChild(closeButton);
+        let closeBtn = document.createElement('div');
+        closeBtn.innerHTML = '×';
+        closeBtn.style.cssText = `
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        `;
+        closeBtn.onclick = () => popupDiv.remove();
 
-        // 将弹出框添加到页面
-        document.body.appendChild(popup);
+        // 创建图表容器
+        let chartDiv = document.createElement('div');
+        chartDiv.style.cssText = 'width: 100%; height: 100%;';
 
-        // 使弹出框可拖动
-        makeDraggable(popup);
-    }
+        // 添加按钮组
+        let buttonGroup = document.createElement('div');
+        buttonGroup.style.cssText = `
+            position: absolute;
+            right: 40px;
+            top: 10px;
+            display: flex;
+            gap: 10px;
+        `;
 
-    function makeDraggable(element) {
-        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-        element.onmousedown = dragMouseDown;
+        // 创建三个按钮
+        const buttons = [
+            { text: '政策数量', type: 'policy_count' },
+            { text: '政策质量', type: 'policy_quality' },
+            { text: '协同机制', type: 'coordination' }
+        ];
 
-        function dragMouseDown(e) {
-            e = e || window.event;
-            e.preventDefault();
-            // 获取鼠标初始位置
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            document.onmousemove = elementDrag;
+        buttons.forEach(btn => {
+            let button = document.createElement('button');
+            button.innerText = btn.text;
+            button.style.cssText = `
+                padding: 4px 12px;
+                min-width: 80px;
+                height: 28px;
+                background: rgba(255,255,255,0.1);
+                border: 1px solid rgba(255,255,255,0.2);
+                color: rgba(255,255,255,0.8);
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 13px;
+                transition: all 0.3s;
+                display: inline-block;
+                line-height: 1;
+                text-align: center;
+                user-select: none;
+                position: relative;
+                outline: none;
+                -webkit-tap-highlight-color: transparent;
+            `;
+            
+            button.onmouseover = () => {
+                button.style.background = 'rgba(255,255,255,0.2)';
+                button.style.transform = 'scale(1.05)';
+                button.style.boxShadow = '0 0 10px rgba(255,255,255,0.2)';
+            };
+            
+            button.onmouseout = () => {
+                button.style.background = 'rgba(255,255,255,0.1)';
+                button.style.transform = 'scale(1)';
+                button.style.boxShadow = 'none';
+            };
+            
+            button.onclick = () => {
+                buttonGroup.querySelectorAll('button').forEach(b => {
+                    b.style.background = 'rgba(255,255,255,0.1)';
+                    b.style.borderColor = 'rgba(255,255,255,0.2)';
+                });
+                
+                button.style.background = 'rgba(255,255,255,0.3)';
+                button.style.borderColor = 'rgba(255,255,255,0.4)';
+                
+                updateChart(btn.type);
+            };
+            
+            buttonGroup.appendChild(button);
+        });
+
+        popupDiv.appendChild(buttonGroup);
+
+        popupDiv.appendChild(closeBtn);
+        popupDiv.appendChild(chartDiv);
+        document.body.appendChild(popupDiv);
+
+        // 初始化图表
+        let provinceChart = echarts.init(chartDiv);
+
+        function updateChart(type) {
+            let option = {
+                title: {
+                    text: province,
+                    textStyle: {
+                        color: '#fff',
+                        fontSize: '16'
+                    },
+                    left: 'center',
+                    top: '2%'
+                },
+                grid: {
+                    top: '15%',
+                    left: '3%',
+                    right: '4%',
+                    bottom: '10%',
+                    containLabel: true
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'],
+                    axisLabel: {
+                        show: true,
+                        interval: 0,
+                        color: 'rgba(255,255,255,.6)',
+                        rotate: 45
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: 'rgba(255,255,255,.2)'
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: type === 'policy_count' ? '数量' :
+                        type === 'policy_quality' ? '质量' : '指数',
+                    nameTextStyle: {
+                        color: 'rgba(255,255,255,.6)'
+                    },
+                    axisLabel: {
+                        color: 'rgba(255,255,255,.6)'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: 'rgba(255,255,255,.2)'
+                        }
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: 'rgba(255,255,255,.1)',
+                            type: 'dashed'
+                        }
+                    }
+                },
+                series: [{
+                    name: type === 'policy_count' ? '政策数量' :
+                        type === 'policy_quality' ? '政策质量' : '协同机制',
+                    type: 'line',
+                    data: [],  // 这里可以根据type添加相应的数据
+                    smooth: true,
+                    symbol: 'circle',
+                    symbolSize: 8,
+                    itemStyle: {
+                        color: '#62c98d',
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    },
+                    lineStyle: {
+                        color: '#62c98d',
+                        width: 2
+                    },
+                    areaStyle: {
+                        color: {
+                            type: 'linear',
+                            x: 0,
+                            y: 0,
+                            x2: 0,
+                            y2: 1,
+                            colorStops: [{
+                                offset: 0,
+                                color: 'rgba(98,201,141,0.5)'
+                            }, {
+                                offset: 1,
+                                color: 'rgba(98,201,141,0.1)'
+                            }]
+                        }
+                    }
+                }]
+            };
+
+            provinceChart.setOption(option);
         }
 
-        function elementDrag(e) {
-            e = e || window.event;
-            e.preventDefault();
-            // 计算鼠标移动的距离
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            // 设置元素的新位置
-            element.style.top = (element.offsetTop - pos2) + "px";
-            element.style.left = (element.offsetLeft - pos1) + "px";
-        }
+        // 初始显示政策数量
+        updateChart('policy_count');
 
-        function closeDragElement() {
-            // 停止移动时清除事件
-            document.onmouseup = null;
-            document.onmousemove = null;
-        }
+        // 监听窗口调整
+        window.addEventListener('resize', () => {
+            provinceChart.resize();
+        });
     }
 
     map();
