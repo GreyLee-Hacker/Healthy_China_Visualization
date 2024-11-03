@@ -55,8 +55,8 @@ $(function () {
             grid: {
                 containLabel: true,
                 top: 10,
-                left: 0,
-                right: 15,
+                left: '10%',
+                right: '10%',
                 bottom: -10
             },
             tooltip: {
