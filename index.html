@@ -210,14 +210,12 @@
         <div class="boxall" style="height:100%">
           <div class="alltitle">中央维度
             <div class="pulll_right sebtn">
-              <a href="https://gitee.com/iGaoWei/big-data-view" class="active">近七天</a>
-              <a href="https://gitee.com/iGaoWei/big-data-view">近30天</a>
-              <a href="https://gitee.com/iGaoWei/big-data-view">12月</a>
+              <a href="javascript:void(0)" class="active" onclick="switchView('政策数量')">政策数量</a>
+              <a href="javascript:void(0)" onclick="switchView('政策质量')">政策质量</a>
+              <a href="javascript:void(0)" onclick="switchView('协同机制')">协同机制</a>
             </div>
           </div>
-          <div class="boxnav" id="echart4"></div>
-
-
+          <div class="boxnav" id="echart4" style="width: 100%; height: 400px;"></div>
           <div class="boxfoot"></div>
         </div>
       </li>
@@ -244,6 +242,91 @@
 
   <script type="text/javascript">
     $('.counter').countUp();
+  </script>
+
+  <script>
+    // 初始化 ECharts 实例
+    var myChart = echarts.init(document.getElementById('echart4'));
+
+    // 数据定义
+    var data = [
+      { "年份": "2016年", "政策数量": 24.2529, "政策质量": 49.5486, "协同机制": 59.8673 },
+      { "年份": "2017年", "政策数量": 28.0691, "政策质量": 61.1064, "协同机制": 44.919 },
+      { "年份": "2018年", "政策数量": 30.1834, "政策质量": 61.1064, "协同机制": 56.5327 },
+      { "年份": "2019年", "政策数量": 54.1496, "政策质量": 61.3241, "协同机制": 64.3206 },
+      { "年份": "2020年", "政策数量": 93.0057, "政策质量": 73.8645, "协同机制": 57.8926 },
+      { "年份": "2021年", "政策数量": 73.8937, "政策质量": 84.9305, "协同机制": 61.993 },
+      { "年份": "2022年", "政策数量": 75.4344, "政策质量": 92.5849, "协同机制": 62.1522 },
+      { "年份": "2023年", "政策数量": 81.9258, "政策质量": 97.3474, "协同机制": 77.4845 }
+    ];
+
+    // 提取年份
+    var years = data.map(item => item["年份"]);
+
+    // 切换视图的函数
+    function switchView(type) {
+      // 更新激活状态的样式
+      document.querySelectorAll('.sebtn a').forEach(a => {
+        a.classList.remove('active');
+        if (a.textContent === type) {
+          a.classList.add('active');
+        }
+      });
+
+      // 获取对应的数据
+      var seriesData = data.map(item => item[type]);
+
+      // 更新图表配置
+      var option = {
+        title: {
+          text: type + '随年份的变化趋势',
+          left: 'center'
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross'
+          }
+        },
+        xAxis: {
+          type: 'category',
+          data: years,
+          name: '年份'
+        },
+        yAxis: {
+          type: 'value',
+          name: type
+        },
+        series: [{
+          name: type,
+          type: 'line',
+          data: seriesData,
+          smooth: true,
+          markPoint: {
+            data: [
+              { type: 'max', name: '最大值' },
+              { type: 'min', name: '最小值' }
+            ]
+          },
+          markLine: {
+            data: [
+              { type: 'average', name: '平均值' }
+            ]
+          }
+        }]
+      };
+
+      // 使用配置项显示图表
+      myChart.setOption(option);
+    }
+
+    // 初始显示政策数量的图表
+    switchView('政策数量');
+
+    // 监听窗口大小变化，调整图表大小
+    window.addEventListener('resize', function () {
+      myChart.resize();
+    });
   </script>
 </body>
 
