@@ -74,37 +74,7 @@
         </div>
         <div class="boxall" style="height: calc(60% - .15rem)">
           <div class="alltitle">部门协同网络</div>
-          <div class="sycm sycm2">
-            <ul class="clearfix">
-              <li>
-                <h2>1824</h2>
-                <span>字段名称</span>
-              </li>
-              <li>
-                <h2>1920</h2>
-                <span>字段名称</span>
-              </li>
-              <li>
-                <h2>19%</h2>
-                <span>字段名称</span>
-              </li>
-
-              <li>
-                <h2>1824</h2>
-                <span>字段名称</span>
-              </li>
-              <li>
-                <h2>19%</h2>
-                <span>字段名称</span>
-              </li>
-
-              <li>
-                <h2>1824</h2>
-                <span>字段名称</span>
-              </li>
-
-            </ul>
-          </div>
+          <div class="boxnav" id="network"></div>
           <div class="boxfoot"></div>
         </div>
 
@@ -185,18 +155,10 @@
         <div class="boxall" style="height: 100%">
           <div class="alltitle">政策树
             <div class="pulll_right">
-              <a href="https://gitee.com/iGaoWei/big-data-view"><span></span>已检点</a>
-              <a href="https://gitee.com/iGaoWei/big-data-view"><span></span>未检点</a>
+              <a href="javascript:void(0)" class="active">健康中国政策体系</a>
             </div>
           </div>
-          <div class="boxnav">
-            <ul class="btbox">
-              <li id="bt01"></li>
-              <li id="bt02"></li>
-              <li id="bt03"></li>
-              <li id="bt04"></li>
-            </ul>
-          </div>
+          <div class="boxnav" id="policyTree"></div>
           <div class="boxfoot"></div>
         </div>
 
@@ -252,7 +214,7 @@
       { "年份": "2020年", "健康中国建设发展测度指数": 71.8425803002, "政策数量": 93.0057470726, "政策质量": 73.8645356701, "协同机制": 57.8925584476, "防控重大疾病": 75, "全方干预健康影响因素": 73, "维护全生命周期健康": 71, "当年完成率": 59.2760180995, "总体完成率": 80.5429864253, "平均完成月数": 11.191011236, "发文联合率": 30.303030303, "平均协作规模": 1.8917748918, "参与部门": 61 },
       { "年份": "2021年", "健康中国建设发展测度指数": 67.3875817514, "政策数量": 73.8936942405, "政策质量": 84.9304809287, "协同机制": 61.9930132046, "防控重大疾病": 43, "全方位干预健康影响因素": 67, "维护全生命周期健康": 83, "当年完成率": 65.1515151515, "总体完成率": 96.9696969697, "平均完成月数": 9.84375, "发文联合率": 29.8165137615, "平均协作规模": 2.1055045872, "参与部门": 63 },
       { "年份": "2022年", "健康中国建设发展测度指数": 68.0808548686, "政策数量": 75.4343704986, "政策质量": 92.5848505098, "协同机制": 62.1521907227, "防控重大疾病": 39, "全方位干预健康影响因素": 84, "维护全生命周期健康": 80, "当年完成率": 77.9411764706, "总体完成率": 92.6470588235, "平均完成月数": 6.9841269841, "发文联合率": 32.2033898305, "平均协作规模": 2.1610169492, "参与部门": 58 },
-      { "年份": "2023年", "健康中国建设发展测度指数": 81.5569409048, "政策数量": 81.9258155176, "政策质量": 97.3474325483, "协同机制": 77.4844711643, "防控重大疾病": 59, "��方位干预健康影响因素": 68, "维护生命周期健康": 74, "当年完成率": 84.0579710145, "总体完成率": 92.7536231884, "平均完成月数": 4.890625, "发文联合率": 41.5637860082, "平均协作规模": 2.658436214, "参与部门": 62 }
+      { "年份": "2023年", "健康中国建设发展测度指数": 81.5569409048, "政策数量": 81.9258155176, "政策质量": 97.3474325483, "协同机制": 77.4844711643, "防控重大疾病": 59, "方位干预健康影响因素": 68, "维护生命周期健康": 74, "当年完成率": 84.0579710145, "总体完成率": 92.7536231884, "平均完成月数": 4.890625, "发文联合率": 41.5637860082, "平均协作规模": 2.658436214, "参与部门": 62 }
     ];
 
     // 页面加载完成后初始化
@@ -866,6 +828,208 @@
 
     // 将函数暴露到全局作用域
     window.switchActionView = switchActionView;
+  </script>
+
+  <script>
+    // 政策树图表初始化
+    var policyTreeChart = null;
+
+    // 定义政策树数据
+    const policyTreeData = {
+      name: '健康中国政策体系',
+      children: [
+        {
+          name: '防控重大疾病',
+          children: [
+            { name: '癌症防治行动' },
+            { name: '心脑血管疾病防治行动' },
+            { name: '糖尿病防治行动' },
+            { name: '传染病及地方病防控行动' },
+            { name: '慢性呼吸系统疾病防治行动' }
+          ]
+        },
+        {
+          name: '全方位干预健康影响因素',
+          children: [
+            { name: '健康知识普及行动' },
+            { name: '合理膳食行动' },
+            { name: '全民健身行动' },
+            { name: '控烟行动' },
+            { name: '健康环境促进行动' }
+          ]
+        },
+        {
+          name: '维护全生命周期健康',
+          children: [
+            { name: '妇幼健康促进行动' },
+            { name: '中小学健康促进行动' },
+            { name: '职业健康保护行动' },
+            { name: '老年健康促进行动' },
+            { name: '心理健康促进行动' }
+          ]
+        }
+      ]
+    };
+
+    function getPolicyTreeOption() {
+      // 配置树图选项
+      const policyTreeOption = {
+        tooltip: {
+          trigger: 'item',
+          triggerOn: 'mousemove'
+        },
+        series: [
+          {
+            type: 'tree',
+            data: [policyTreeData],
+            top: '5%',
+            left: '10%',
+            bottom: '5%',
+            right: '10%',
+            symbolSize: 10,
+            label: {
+              position: 'left',
+              verticalAlign: 'middle',
+              align: 'right',
+              color: 'rgba(255,255,255,.8)',
+              fontSize: 12
+            },
+            leaves: {
+              label: {
+                position: 'right',
+                verticalAlign: 'middle',
+                align: 'left'
+              }
+            },
+            emphasis: {
+              focus: 'descendant'
+            },
+            expandAndCollapse: true,
+            animationDuration: 550,
+            animationDurationUpdate: 750,
+            initialTreeDepth: 2,
+            lineStyle: {
+              color: '#58c485',
+              width: 1
+            },
+            itemStyle: {
+              color: '#58c485',
+              borderColor: '#fff'
+            }
+          }
+        ]
+      };
+      return policyTreeOption;
+    }
+
+    $(document).ready(function () {
+      // 初始化树图
+      policyTreeChart = echarts.init(document.getElementById('policyTree'));
+      policyTreeChart.setOption(getPolicyTreeOption());
+
+      // 监听窗口大小变化
+      window.addEventListener('resize', function () {
+        if (policyTreeChart) {
+          policyTreeChart.resize();
+        }
+      });
+    });
+  </script>
+
+  <script>
+    var networkChart = null;
+
+    // 定义部门节点数据
+    const departmentNodes = [
+      { name: '国家卫生健康委员会', symbolSize: 50 },
+      { name: '科学技术部', symbolSize: 30 },
+      { name: '财政部', symbolSize: 30 },
+      { name: '教育部', symbolSize: 30 },
+      { name: '民政部', symbolSize: 30 },
+      { name: '人力资源和社会保障部', symbolSize: 30 },
+      { name: '中央宣传部', symbolSize: 30 },
+      { name: '工业和信息化部', symbolSize: 30 },
+      { name: '公安部', symbolSize: 30 },
+      { name: '交通运输部', symbolSize: 30 }
+    ];
+
+    // 定义部门间关系数据
+    const departmentLinks = [
+      { source: '国家卫生健康委员会', target: '科学技术部', value: 0.8 },
+      { source: '国家卫生健康委员会', target: '财政部', value: 0.7 },
+      { source: '国家卫生健康委员会', target: '教育部', value: 0.9 },
+      { source: '国家卫生健康委员会', target: '民政部', value: 0.6 },
+      { source: '教育部', target: '科学技术部', value: 0.5 },
+      { source: '民政部', target: '人力资源和社会保障部', value: 0.4 },
+      { source: '中央宣传部', target: '教育部', value: 0.6 },
+      { source: '工业和信息化部', target: '科学技术部', value: 0.7 },
+      { source: '公安部', target: '交通运输部', value: 0.5 },
+      // 可以继续添加更多关系
+    ];
+
+    // 初始化关系图配置
+    function getNetworkOption() {
+      return {
+        tooltip: {
+          formatter: function (params) {
+            if (params.dataType === 'edge') {
+              return `${params.data.source} -> ${params.data.target}<br/>协同强度: ${params.data.value}`;
+            }
+            return params.data.name;
+          }
+        },
+        series: [{
+          type: 'graph',
+          layout: 'force',
+          force: {
+            repulsion: 400,
+            edgeLength: 120
+          },
+          roam: true,
+          draggable: true,
+          label: {
+            show: true,
+            position: 'right',
+            color: 'rgba(255,255,255,.8)',
+            fontSize: 12
+          },
+          data: departmentNodes.map(node => ({
+            ...node,
+            itemStyle: {
+              color: '#58c485'
+            }
+          })),
+          edges: departmentLinks.map(link => ({
+            ...link,
+            lineStyle: {
+              width: link.value * 5, // 根据关系强度设置线条粗细
+              color: 'rgba(88,196,133,0.6)',
+              curveness: 0.3
+            }
+          })),
+          emphasis: {
+            focus: 'adjacency',
+            lineStyle: {
+              color: '#fff'
+            }
+          },
+        }]
+      };
+    }
+
+    // 页面加载完成后初始化
+    $(document).ready(function () {
+      // 初始化网络图表
+      networkChart = echarts.init(document.getElementById('network'));
+      networkChart.setOption(getNetworkOption());
+
+      // 监听窗口大小变化
+      window.addEventListener('resize', function () {
+        if (networkChart) {
+          networkChart.resize();
+        }
+      });
+    });
   </script>
 </body>
 
