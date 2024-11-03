@@ -210,14 +210,13 @@
         <div class="boxall" style="height:100%">
           <div class="alltitle">中央维度
             <div class="pulll_right sebtn">
-              <a href="https://gitee.com/iGaoWei/big-data-view" class="active">近七天</a>
-              <a href="https://gitee.com/iGaoWei/big-data-view">近30天</a>
-              <a href="https://gitee.com/iGaoWei/big-data-view">12月</a>
+              <a href="javascript:void(0)" class="active" onclick="switchView('总得分')">总得分</a>
+              <a href="javascript:void(0)" onclick="switchView('政策数量')">政策数量</a>
+              <a href="javascript:void(0)" onclick="switchView('政策质量')">政策质量</a>
+              <a href="javascript:void(0)" onclick="switchView('协同机制')">协同机制</a>
             </div>
           </div>
-          <div class="boxnav" id="echart4"></div>
-
-
+          <div class="boxnav" id="echart4" style="width: 100%; height: 200px;"></div>
           <div class="boxfoot"></div>
         </div>
       </li>
@@ -234,7 +233,7 @@
     $(function () {
       $('.wrap,.adduser').liMarquee({
         direction: 'up',//身上滚动 
-        runshort: false,//内容不足时不滚动
+        runshort: false,//内不足时不滚动
         scrollamount: 20//速度
       });
     });
@@ -244,6 +243,198 @@
 
   <script type="text/javascript">
     $('.counter').countUp();
+  </script>
+
+  <script>
+    var myChart = null;
+
+    // 数据定义 - 确保包含所有年份
+    var data = [
+      { "年份": "2016年", "健康中国建设发展测度指数": 41.9978584275, "政策数量": 24.2529053219, "政策质量": 49.548572971, "协同机制": 59.8673247292, "防控重大疾病": 13, "全方位干预健康影响因素": 36, "维护全生命周期健康": 16, "当年完成率": 25.6661991585, "总体完成率": 91.0939691445, "平均完成月数": 31.9817036354, "发文联合率": 28, "平均协作规模": 2.5066666667, "参与部门": 45 },
+      { "年份": "2017年", "健康中国建设发展测度指数": 39.1809892548, "政策数量": 28.0691106009, "政策质量": 61.1064357826, "协同机制": 44.9190013932, "防控重大疾病": 17, "全方位干预健康影响因素": 41, "维护全生命周期健康": 15, "当年完成率": 40.252454418, "总体完成率": 90.7433380084, "平均完成月数": 25.4508338657, "发文联合率": 27.9069767442, "平均协作规模": 1.8372093023, "参与部门": 36 },
+      { "年份": "2018年", "健康中国建设发展测度指数": 44.569907586, "政策数量": 30.1833758144, "政策质量": 61.1064357826, "协同机制": 56.5327288563, "防控重大疾病": 17, "全方位干预健康影响因素": 46, "维护全生命周期健康": 17, "当年完成率": 40.252454418, "总体完成率": 90.7433380084, "平均完成月数": 25.4508338657, "发文联合率": 34.7826086957, "平均协作规模": 1.9891304348, "参与部门": 48 },
+      { "年份": "2019年", "健康中国建设发展测度指数": 58.1998540941, "政策数量": 54.1496466337, "政策质量": 61.3240866555, "协同机制": 64.3206112561, "防控重大疾病": 33, "全方位干预健康影响因素": 58, "维护全生命周期健康": 49, "当年完成率": 43.9759036145, "总体完成率": 77.7108433735, "平均完成月数": 14.976744186, "发文联合率": 30, "平均协作规模": 2.34375, "参与部门": 59 },
+      { "年份": "2020年", "健康中国建设发展测度指数": 71.8425803002, "政策数量": 93.0057470726, "政策质量": 73.8645356701, "协同机制": 57.8925584476, "防控重大疾病": 75, "全方位干预健康影响因素": 73, "维护全生命周期健康": 71, "当年完成率": 59.2760180995, "总体完成率": 80.5429864253, "平均完成月数": 11.191011236, "发文联合率": 30.303030303, "平均协作规模": 1.8917748918, "参与部门": 61 },
+      { "年份": "2021年", "健康中国建设发展测度指数": 67.3875817514, "政策数量": 73.8936942405, "政策质量": 84.9304809287, "协同机制": 61.9930132046, "防控重大疾病": 43, "全方位干预健康影响因素": 67, "维护全生命周期健康": 83, "当年完成率": 65.1515151515, "总体完成率": 96.9696969697, "平均完成月数": 9.84375, "发文联合率": 29.8165137615, "平均协作规模": 2.1055045872, "参与部门": 63 },
+      { "年份": "2022年", "健康中国建设发展测度指数": 68.0808548686, "政策数量": 75.4343704986, "政策质量": 92.5848505098, "协同机制": 62.1521907227, "防控重大疾病": 39, "全方位干预健康影响因素": 84, "维护全生命周期健康": 80, "当年完成率": 77.9411764706, "总体完成率": 92.6470588235, "平均完成月数": 6.9841269841, "发文联合率": 32.2033898305, "平均协作规模": 2.1610169492, "参与部门": 58 },
+      { "年份": "2023年", "健康中国建设发展测度指数": 81.5569409048, "政策数量": 81.9258155176, "政策质量": 97.3474325483, "协同机制": 77.4844711643, "防控重大疾病": 59, "全方位干预健康影响因素": 68, "维护全生命周期健康": 74, "当年完成率": 84.0579710145, "总体完成率": 92.7536231884, "平均完成月数": 4.890625, "发文联合率": 41.5637860082, "平均协作规模": 2.658436214, "参与部门": 62 }
+    ];
+
+    // 页面加载完成后初始化
+    $(document).ready(function () {
+      // 初始化图表实例
+      myChart = echarts.init(document.getElementById('echart4'));
+
+      // 将 switchView 函数暴露到全局作用域
+      window.switchView = switchView;
+
+      // 初始显示总得分
+      switchView('总得分');
+
+      // 监听窗口大小变化
+      window.addEventListener('resize', function () {
+        if (myChart) {
+          myChart.resize();
+        }
+      });
+    });
+
+    function getOption(type) {
+      const dataKey = type === '总得分' ? '健康中国建设发展测度指数' : type;
+      const seriesData = data.map(item => item[dataKey]);
+      const years = data.map(item => item["年份"]);
+
+      return {
+        title: {
+          text: type,
+          textStyle: {
+            color: '#fff',
+            fontSize: '16'
+          },
+          left: 'center',
+          top: '2%'
+        },
+        grid: {
+          top: '15%',
+          left: '3%',
+          right: '4%',
+          bottom: '10%',
+          containLabel: true
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          },
+          formatter: function (params) {
+            const year = params[0].name;
+            const yearData = data.find(item => item["年份"] === year);
+
+            let content = `${year}<br/>`;
+            content += `${params[0].seriesName}: ${params[0].value.toFixed(2)}<br/>`;
+
+            if (type === '政策数量') {
+              content += `防控重大疾病: ${yearData["防控重大疾病"]}件<br/>`;
+              content += `全方位干预健康影响因素: ${yearData["全方位干预健康影响因素"]}件<br/>`;
+              content += `维护全生命周期健康: ${yearData["维护全生命周期健康"]}件<br/>`;
+            }
+
+            if (type === '政策质量') {
+              content += `当年完成率: ${yearData["当年完成率"].toFixed(2)}%<br/>`;
+              content += `总体完成率: ${yearData["总体完成率"].toFixed(2)}%<br/>`;
+              content += `平均完成月数: ${yearData["平均完成月数"].toFixed(2)}月<br/>`;
+            }
+
+            if (type === '协同机制') {
+              content += `发文联合率: ${yearData["发文联合率"].toFixed(2)}%<br/>`;
+              content += `平均协作规模: ${yearData["平均协作规模"].toFixed(2)}<br/>`;
+              content += `参与部门: ${yearData["参与部门"]}`;
+            }
+
+            return content;
+          }
+        },
+        legend: {
+          data: [type],
+          textStyle: {
+            color: 'rgba(255,255,255,.6)'
+          },
+          top: '5%',
+          right: '3%'
+        },
+        xAxis: {
+          type: 'category',
+          data: years,
+          axisLabel: {
+            show: true,
+            interval: 0,
+            color: 'rgba(255,255,255,.6)',
+            rotate: 45
+          },
+          axisLine: {
+            lineStyle: {
+              color: 'rgba(255,255,255,.2)'
+            }
+          },
+          axisTick: {
+            alignWithLabel: true
+          }
+        },
+        yAxis: {
+          type: 'value',
+          name: type === '总得分' ? '指数' : '数值',
+          nameTextStyle: {
+            color: 'rgba(255,255,255,.6)'
+          },
+          axisLabel: {
+            color: 'rgba(255,255,255,.6)'
+          },
+          axisLine: {
+            lineStyle: {
+              color: 'rgba(255,255,255,.2)'
+            }
+          },
+          splitLine: {
+            lineStyle: {
+              color: 'rgba(255,255,255,.1)',
+              type: 'dashed'
+            }
+          }
+        },
+        series: [{
+          name: type,
+          type: 'line',
+          data: seriesData,
+          smooth: true,
+          symbol: 'circle',
+          symbolSize: 8,
+          itemStyle: {
+            color: '#62c98d',
+            borderWidth: 2,
+            borderColor: '#fff'
+          },
+          lineStyle: {
+            color: '#62c98d',
+            width: 2
+          },
+          areaStyle: {
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [{
+                offset: 0,
+                color: 'rgba(98,201,141,0.5)'
+              }, {
+                offset: 1,
+                color: 'rgba(98,201,141,0.1)'
+              }]
+            }
+          }
+        }]
+      };
+    }
+
+    function switchView(type) {
+      // 更新按钮状态
+      document.querySelectorAll('.sebtn a').forEach(a => {
+        a.classList.remove('active');
+        if (a.textContent === type) {
+          a.classList.add('active');
+        }
+      });
+
+      // 更新图表
+      if (myChart) {
+        myChart.clear();  // 清除旧的图表
+        myChart.setOption(getOption(type));
+      }
+    }
   </script>
 </body>
 
