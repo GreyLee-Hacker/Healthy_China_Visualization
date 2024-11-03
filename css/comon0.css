@@ -628,3 +628,31 @@ body {
 .alltitle .sebtn a.active {
 	opacity: 1
 }
+
+.action-btn-container {
+	overflow-x: auto;
+	overflow-y: hidden;
+	-webkit-overflow-scrolling: touch;
+	/* 为iOS添加平滑滚动 */
+	scrollbar-width: none;
+	/* Firefox */
+	-ms-overflow-style: none;
+	/* IE and Edge */
+}
+
+.action-btn-container::-webkit-scrollbar {
+	display: none;
+	/* Chrome, Safari and Opera */
+}
+
+.action-btn {
+	padding: 0 5px;
+}
+
+.action-btn a {
+	display: inline-block;
+	padding: 0 10px;
+	min-width: 40px;
+	text-align: center;
+	margin: 0 2px;
+}

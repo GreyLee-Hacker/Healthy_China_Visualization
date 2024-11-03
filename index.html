@@ -144,9 +144,13 @@
       <li>
 
         <div class="boxall" style="height: calc(50% - .15rem)">
-          <div class="alltitle">部门维度 <div class="pulll_right">
-              <a href="https://gitee.com/iGaoWei/big-data-view"><span></span>已维修</a>
-              <a href="https://gitee.com/iGaoWei/big-data-view"><span></span>未维修</a>
+          <div class="alltitle">部门维度
+            <div class="pulll_right sebtn department-btn">
+              <a href="javascript:void(0)" class="active" onclick="switchDepartmentView('2019')">2019</a>
+              <a href="javascript:void(0)" onclick="switchDepartmentView('2020')">2020</a>
+              <a href="javascript:void(0)" onclick="switchDepartmentView('2021')">2021</a>
+              <a href="javascript:void(0)" onclick="switchDepartmentView('2022')">2022</a>
+              <a href="javascript:void(0)" onclick="switchDepartmentView('2023')">2023</a>
             </div>
           </div>
 
@@ -155,32 +159,27 @@
           <div class="boxfoot"></div>
         </div>
         <div class="boxall" style="height: calc(50% - .15rem)">
-          <div class="alltitle">行动维度</div>
-          <div class="wrap boxnav">
-            <ul>
-              <li>
-                <p><span>深圳腾讯科技有限公司</span><span>门禁系统</span><span>在线</span></p>
-              </li>
-              <li>
-                <p><span>网易科技有限公司</span><span>防火系统</span><span>在线</span></p>
-              </li>
-              <li>
-                <p><span>百度科技有限公司</span><span>防火系统</span><span>在线</span></p>
-              </li>
-              <li>
-                <p><span>汽车之家科技有限公司</span><span>定位系统</span><span>在线</span></p>
-              </li>
-              <li>
-                <p><span>小米科技有限公司</span><span>定位系统</span><span>在线</span></p>
-              </li>
-
-            </ul>
+          <div class="alltitle">行动维度
+            <div class="pulll_right sebtn action-btn-container"
+              style="width: 300px; overflow-x: auto; white-space: nowrap;">
+              <div class="action-btn" style="display: inline-flex;">
+                <a href="javascript:void(0)" class="active" onclick="switchActionView('2016')">2016</a>
+                <a href="javascript:void(0)" onclick="switchActionView('2017')">2017</a>
+                <a href="javascript:void(0)" onclick="switchActionView('2018')">2018</a>
+                <a href="javascript:void(0)" onclick="switchActionView('2019')">2019</a>
+                <a href="javascript:void(0)" onclick="switchActionView('2020')">2020</a>
+                <a href="javascript:void(0)" onclick="switchActionView('2021')">2021</a>
+                <a href="javascript:void(0)" onclick="switchActionView('2022')">2022</a>
+                <a href="javascript:void(0)" onclick="switchActionView('2023')">2023</a>
+              </div>
+            </div>
           </div>
+          <div class="boxnav" id="echart5"></div>
           <div class="boxfoot"></div>
         </div>
       </li>
     </ul>
-    <div class="copyright">更多模板关注公众号"DreamCoders"免费获取</div>
+    <!-- <div class="copyright">更多模板关注公众号"DreamCoders"免费获取</div> -->
   </div>
 
   <div class="mainbox2">
@@ -209,7 +208,7 @@
       <li>
         <div class="boxall" style="height:100%">
           <div class="alltitle">中央维度
-            <div class="pulll_right sebtn">
+            <div class="pulll_right sebtn central-btn">
               <a href="javascript:void(0)" class="active" onclick="switchView('总得分')">总得分</a>
               <a href="javascript:void(0)" onclick="switchView('政策数量')">政策数量</a>
               <a href="javascript:void(0)" onclick="switchView('政策质量')">政策质量</a>
@@ -421,20 +420,456 @@
     }
 
     function switchView(type) {
-      // 更新按钮状态
-      document.querySelectorAll('.sebtn a').forEach(a => {
-        a.classList.remove('active');
-        if (a.textContent === type) {
-          a.classList.add('active');
+      // 更新按钮状态，只选择中央维度的按钮
+      $('.central-btn a').each(function () {
+        $(this).removeClass('active');
+        if ($(this).text() === type) {
+          $(this).addClass('active');
         }
       });
 
       // 更新图表
       if (myChart) {
-        myChart.clear();  // 清除旧的图表
+        myChart.clear();
         myChart.setOption(getOption(type));
       }
     }
+  </script>
+
+  <script>
+    var departmentChart = null;
+    var spNum = 10;
+
+    const departmentData = {
+      '2019': [
+        { name: '国家卫生健康委员会', value: 46.91 },
+        { name: '国家市场监督管理总局', value: 26.94 },
+        { name: '人力资源和社会保障部', value: 26.74 },
+        { name: '科学技术部', value: 26.51 },
+        { name: '国务院扶贫开发领导小组办公室', value: 26.32 },
+        { name: '中华全国总工会', value: 26.31 },
+        { name: '海关总署', value: 26.23 },
+        { name: '财政部', value: 26.10 },
+        { name: '国家民族事务委员会', value: 26.05 },
+        { name: '住房和城乡建设部', value: 25.99 }
+      ],
+      '2020': [
+        { name: '国家卫生健康委员会', value: 54.14 },
+        { name: '中央宣传部', value: 28.84 },
+        { name: '国家信访局', value: 28.65 },
+        { name: '中央网络安全和信息化委员会办', value: 27.32 },
+        { name: '财政部', value: 27.05 },
+        { name: '公安部', value: 26.92 },
+        { name: '中央政法委员会', value: 26.92 },
+        { name: '国务院扶贫开发领导小组办公室', value: 26.91 },
+        { name: '民政部', value: 26.61 },
+        { name: '司法部', value: 26.54 }
+      ],
+      '2021': [
+        { name: '国家卫生健康委员会', value: 52.98 },
+        { name: '中华全国总工会', value: 28.36 },
+        { name: '人力资源和社会保障部', value: 27.72 },
+        { name: '财政部', value: 27.53 },
+        { name: '科学技术部', value: 27.23 },
+        { name: '中央政法委员会', value: 27.06 },
+        { name: '中华全国妇女联合会', value: 27.01 },
+        { name: '中央宣传部', value: 26.68 },
+        { name: '民政部', value: 26.50 },
+        { name: '住房和城乡建设部', value: 26.26 }
+      ],
+      '2022': [
+        { name: '国家卫生健康委员会', value: 52.67 },
+        { name: '中央政法委员会', value: 32.92 },
+        { name: '中央宣传部', value: 29.60 },
+        { name: '中国民用航空局', value: 28.88 },
+        { name: '国家铁路局', value: 28.70 },
+        { name: '国家广播电视总局', value: 28.19 },
+        { name: '工业和信息化部', value: 27.73 },
+        { name: '交通运输部', value: 27.52 },
+        { name: '文化和旅游部', value: 27.09 },
+        { name: '中华全国妇女联合会', value: 26.92 }
+      ],
+      '2023': [
+        { name: '国家卫生健康委员会', value: 69.75 },
+        { name: '国家铁路局', value: 31.16 },
+        { name: '中国国家铁路集团有限公司', value: 31.16 },
+        { name: '中国民用航空局', value: 31.11 },
+        { name: '民政部', value: 29.47 },
+        { name: '中央宣传部', value: 28.85 },
+        { name: '教育部', value: 28.74 },
+        { name: '科学技术部', value: 28.52 },
+        { name: '中华全国总工会', value: 28.14 },
+        { name: '交通运输部', value: 28.06 }
+      ]
+    };
+
+    // 页面加载完成后初始化
+    $(document).ready(function () {
+      // 初始化图表实例
+      departmentChart = echarts.init(document.getElementById('echart3'));
+
+      // 初始显示2019年数据
+      switchDepartmentView('2019');
+
+      // 监听窗口大小变化
+      window.addEventListener('resize', function () {
+        if (departmentChart) {
+          departmentChart.resize();
+        }
+      });
+    });
+
+    function getDepartmentOption(year) {
+      // 获取当前年份的部门名称数组
+      const y_data = departmentData[year].map(item => item.name);
+
+      return {
+        grid: {
+          containLabel: true,
+          top: 10,
+          left: 0,
+          right: -150,
+          bottom: 0
+        },
+        tooltip: {
+          show: true,
+          formatter: function (params) {
+            if (params.name == '国务院扶贫开发领导小组办公室') {
+              return '国务院扶贫开发<br/>领导小组办公室<br/>' + params.seriesName + ':' + params.value.toFixed(2)
+            }
+            if (params.name == '中央网络安全和信息化委员会办') {
+              return '中央网络安全<br/>和信息化委员会办<br/>' + params.seriesName + ':' + params.value.toFixed(2)
+            }
+            return params.name + '<br/>' + params.seriesName + ':' + params.value.toFixed(2)
+          }
+        },
+        xAxis: {
+          splitNumber: spNum,
+          max: Math.max(...departmentData[year].map(item => item.value)) + 5,
+          axisLabel: {
+            show: false,
+            formatter: function (v) {
+              var _v = (v).toFixed(2);
+              return _v == 0 ? _v : _v;
+            }
+          },
+          axisLine: { show: false },
+          axisTick: { show: false },
+          splitLine: { show: false }
+        },
+        yAxis: [{
+          data: y_data,
+          inverse: true,
+          axisLabel: {
+            fontSize: 12,
+            color: 'rgba(255,255,255,.6)'
+          },
+          axisLine: { show: false },
+          axisTick: { show: false },
+          splitLine: { show: false }
+        }, {
+          show: false,
+          data: y_data,
+          axisLine: { show: false }
+        }],
+        series: [{
+          type: 'bar',
+          name: '总得分',
+          label: {
+            normal: {
+              show: true,
+              position: 'inside',
+              formatter: function (params) {
+                return params.value.toFixed(2);
+              },
+              textStyle: {
+                color: '#fff',
+                fontSize: 12
+              }
+            }
+          },
+          barWidth: '75%',
+          itemStyle: {
+            normal: { color: '#58c485' },
+            emphasis: { color: '#ea7231' }
+          },
+          data: departmentData[year].map(item => item.value)
+        }]
+      };
+    }
+
+    function switchDepartmentView(year) {
+      // 更新按钮状态，只选择部门维度的按钮
+      $('.department-btn a').each(function () {
+        $(this).removeClass('active');
+        if ($(this).text() === year) {
+          $(this).addClass('active');
+        }
+      });
+
+      // 更新图表
+      if (departmentChart) {
+        departmentChart.clear();
+        departmentChart.setOption(getDepartmentOption(year));
+      }
+    }
+
+    // 将函数暴露到全局作用域
+    window.switchDepartmentView = switchDepartmentView;
+  </script>
+
+  <script>
+    var actionChart = null;
+
+    // 定义行动维度的数据
+    const actionData = {
+      '2016': [
+        { name: '老年健康促进行动', value: 47.55 },
+        { name: '健康知识普及行动', value: 34.17 },
+        { name: '职业健康保护行动', value: 31.78 },
+        { name: '全民健身行动', value: 31.00 },
+        { name: '健康环境促进行动', value: 26.37 },
+        { name: '糖尿病防治行动', value: 26.76 },
+        { name: '控烟行动', value: 24.58 },
+        { name: '合理膳食行动', value: 23.21 },
+        { name: '传染病及地方病防控行动', value: 21.82 },
+        { name: '癌症防治行动', value: 21.10 },
+        { name: '慢性呼吸系统疾病防治行动', value: 19.62 },
+        { name: '妇幼健康促进行动', value: 19.58 },
+        { name: '心理健康促进行动', value: 19.43 },
+        { name: '心脑血管疾病防治行动', value: 18.18 },
+        { name: '中小学健康促进行动', value: 17.28 }
+      ],
+      '2017': [
+        { name: '心理健康促进行动', value: 44.48 },
+        { name: '老年健康促进行动', value: 38.25 },
+        { name: '健康知识普及行动', value: 37.07 },
+        { name: '传染病及地方病防控行动', value: 36.46 },
+        { name: '慢性呼吸系统疾病防治行动', value: 35.19 },
+        { name: '妇幼健康促进行动', value: 29.52 },
+        { name: '合理膳食行动', value: 29.00 },
+        { name: '控烟行动', value: 27.66 },
+        { name: '癌症防治行动', value: 27.15 },
+        { name: '糖尿病防治行动', value: 26.60 },
+        { name: '心脑血管疾病防治行动', value: 26.11 },
+        { name: '全民健身行动', value: 22.97 },
+        { name: '职业健康保护行动', value: 22.88 },
+        { name: '中小学健康促进行动', value: 22.31 },
+        { name: '健康环境促进行动', value: 22.24 }
+      ],
+      '2018': [
+        { name: '健康知识普及行动', value: 46.85 },
+        { name: '老年健康促进行动', value: 39.64 },
+        { name: '合理膳食行动', value: 36.65 },
+        { name: '控烟行动', value: 34.68 },
+        { name: '中小学健康促进行动', value: 33.09 },
+        { name: '妇幼健康促进行动', value: 31.67 },
+        { name: '传染病及地方病防控行动', value: 31.43 },
+        { name: '健康环境促进行动', value: 30.94 },
+        { name: '全民健身行动', value: 27.78 },
+        { name: '心理健康促进行动', value: 23.38 },
+        { name: '职业健康保护行动', value: 22.36 },
+        { name: '癌症防治行动', value: 22.01 },
+        { name: '慢性呼吸系统疾病防治行动', value: 18.33 },
+        { name: '心脑血管疾病防治行动', value: 16.41 },
+        { name: '糖尿病防治行动', value: 16.10 }
+      ],
+      '2019': [
+        { name: '老年健康促进行动', value: 47.58 },
+        { name: '健康知识普及行动', value: 45.62 },
+        { name: '合理膳食行动', value: 44.48 },
+        { name: '中小学健康促进行动', value: 43.80 },
+        { name: '职业健康保护行动', value: 38.38 },
+        { name: '传染病及地方病防控行动', value: 36.02 },
+        { name: '妇幼健康促进行动', value: 35.77 },
+        { name: '心理健康促进行动', value: 35.64 },
+        { name: '控烟行动', value: 33.85 },
+        { name: '全民健身行动', value: 33.79 },
+        { name: '癌症防治行动', value: 32.98 },
+        { name: '健康环境促进行动', value: 28.10 },
+        { name: '糖尿病防治行动', value: 27.34 },
+        { name: '心脑血管疾病防治行动', value: 21.00 },
+        { name: '慢性呼吸系统疾病防治行动', value: 16.94 }
+      ],
+      '2020': [
+        { name: '老年健康促进行动', value: 61.94 },
+        { name: '传染病及地方病防控行动', value: 53.97 },
+        { name: '健康知识普及行动', value: 40.75 },
+        { name: '心理健康促进行动', value: 38.67 },
+        { name: '控烟行动', value: 37.19 },
+        { name: '职业健康保护行动', value: 36.77 },
+        { name: '妇幼健康促进行动', value: 36.06 },
+        { name: '健康环境促进行动', value: 35.70 },
+        { name: '合理膳食行动', value: 33.91 },
+        { name: '全民健身行动', value: 33.64 },
+        { name: '中小学健康促进行动', value: 33.42 },
+        { name: '心脑血管疾病防治行动', value: 28.99 },
+        { name: '癌症防治行动', value: 26.76 },
+        { name: '慢性呼吸系统疾病防治行动', value: 22.27 },
+        { name: '糖尿病防治行动', value: 19.50 }
+      ],
+      '2021': [
+        { name: '健康知识普及行动', value: 52.82 },
+        { name: '老年健康促进行动', value: 50.36 },
+        { name: '健康环境促进行动', value: 49.74 },
+        { name: '心理健康促进行动', value: 44.17 },
+        { name: '职业健康保护行动', value: 44.08 },
+        { name: '中小学健康促进行动', value: 43.66 },
+        { name: '妇幼健康促进行动', value: 43.62 },
+        { name: '全民健身行动', value: 40.40 },
+        { name: '合理膳食行动', value: 36.86 },
+        { name: '传染病及地方病防控行动', value: 36.18 },
+        { name: '心脑血管疾病防治行动', value: 33.63 },
+        { name: '控烟行动', value: 32.67 },
+        { name: '慢性呼吸系统疾病防治行动', value: 26.53 },
+        { name: '癌症防治行动', value: 25.83 },
+        { name: '糖尿病防治行动', value: 21.63 }
+      ],
+      '2022': [
+        { name: '老年健康促进行动', value: 65.39 },
+        { name: '健康知识普及行动', value: 56.75 },
+        { name: '妇幼健康促进行动', value: 49.52 },
+        { name: '健康环境促进行动', value: 47.86 },
+        { name: '全民健身行动', value: 47.40 },
+        { name: '职业健康保护行动', value: 45.46 },
+        { name: '中小学健康促进行动', value: 39.29 },
+        { name: '传染病及地方病防控行动', value: 38.15 },
+        { name: '控烟行动', value: 33.69 },
+        { name: '慢性呼吸系统疾病防治行动', value: 31.77 },
+        { name: '合理膳食行动', value: 31.22 },
+        { name: '心理健康促进行动', value: 28.27 },
+        { name: '糖尿病防治行动', value: 27.32 },
+        { name: '心脑血管疾病防治行动', value: 24.86 },
+        { name: '癌症防治行动', value: 20.25 }
+      ],
+      '2023': [
+        { name: '传染病及地方病防控行动', value: 57.36 },
+        { name: '健康知识普及行动', value: 55.92 },
+        { name: '老年健康促进行动', value: 55.56 },
+        { name: '健康环境促进行动', value: 54.44 },
+        { name: '妇幼健康促进行动', value: 54.37 },
+        { name: '心理健康促进行动', value: 50.99 },
+        { name: '职业健康保护行动', value: 48.29 },
+        { name: '全民健身行动', value: 47.11 },
+        { name: '中小学健康促进行动', value: 44.73 },
+        { name: '合理膳食行动', value: 39.05 },
+        { name: '癌症防治行动', value: 36.80 },
+        { name: '心脑血管疾病防治行动', value: 36.70 },
+        { name: '控烟行动', value: 28.01 },
+        { name: '慢性呼吸系统疾病防治行动', value: 27.27 },
+        { name: '糖尿病防治行动', value: 21.36 }
+      ]
+    };
+
+    // 页面加载完成后初始化
+    $(document).ready(function () {
+      // 初始化行动维度图表
+      actionChart = echarts.init(document.getElementById('echart5'));
+
+      // 确保switchActionView函数在全局作用域可用
+      window.switchActionView = switchActionView;
+
+      // 初始显示2016年数据
+      switchActionView('2016');
+
+      // 监听窗口大小变化
+      window.addEventListener('resize', function () {
+        if (actionChart) {
+          actionChart.resize();
+        }
+      });
+    });
+
+    function getActionOption(year) {
+      const y_data = actionData[year].map(item => item.name);
+
+      return {
+        grid: {
+          containLabel: true,
+          top: 10,
+          left: 0,
+          right: -150,
+          bottom: 0
+        },
+        tooltip: {
+          show: true,
+          formatter: function (params) {
+            return params.name + '<br/>' + params.seriesName + ':' + params.value.toFixed(2);
+          }
+        },
+        xAxis: {
+          splitNumber: spNum,
+          max: Math.max(...actionData[year].map(item => item.value)) + 5,
+          axisLabel: {
+            show: false,
+            formatter: function (v) {
+              var _v = (v).toFixed(2);
+              return _v == 0 ? _v : _v;
+            }
+          },
+          axisLine: { show: false },
+          axisTick: { show: false },
+          splitLine: { show: false }
+        },
+        yAxis: [{
+          data: y_data,
+          inverse: true,
+          axisLabel: {
+            fontSize: 8,
+            color: 'rgba(255,255,255,.6)'
+          },
+          axisLine: { show: false },
+          axisTick: { show: false },
+          splitLine: { show: false }
+        }, {
+          show: false,
+          data: y_data,
+          axisLine: { show: false }
+        }],
+        series: [{
+          type: 'bar',
+          name: '总得分',
+          label: {
+            normal: {
+              show: true,
+              position: 'inside',
+              formatter: function (params) {
+                return params.value.toFixed(2);
+              },
+              textStyle: {
+                color: '#fff',
+                fontSize: 8
+              }
+            }
+          },
+          barWidth: '50%',
+          itemStyle: {
+            normal: { color: '#58c485' },
+            emphasis: { color: '#ea7231' }
+          },
+          data: actionData[year].map(item => item.value)
+        }]
+      };
+    }
+
+    function switchActionView(year) {
+      // 更新按钮状态
+      $('.action-btn a').each(function () {
+        $(this).removeClass('active');
+        if ($(this).text() === year) {
+          $(this).addClass('active');
+        }
+      });
+
+      // 更新图表
+      if (actionChart) {
+        actionChart.clear();
+        actionChart.setOption(getActionOption(year));
+      }
+    }
+
+    // 将函数暴露到全局作用域
+    window.switchActionView = switchActionView;
   </script>
 </body>
 
