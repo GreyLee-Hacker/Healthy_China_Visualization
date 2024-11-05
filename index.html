@@ -503,12 +503,12 @@
         },
         xAxis: {
           splitNumber: spNum,
-          max: Math.max(...departmentData[year].map(item => item.value)) + 5,
+          max: Math.max(...departmentData[year].map(item => Math.log(item.value - Math.min(...departmentData[year].map(i => i.value)) + 1)) + 2),
           axisLabel: {
             show: false,
-            formatter: function (v) {
-              var _v = (v).toFixed(2);
-              return _v == 0 ? _v : _v;
+            formatter: function (params) {
+              const department = departmentData[year].find(item => item.name === params.name);
+              return department ? department.value.toFixed(2) : '';
             }
           },
           axisLine: { show: false },
@@ -538,7 +538,8 @@
               show: true,
               position: 'inside',
               formatter: function (params) {
-                return params.value.toFixed(2);
+                const department = departmentData[year].find(item => item.name === params.name);
+                return department ? department.value.toFixed(2) : '';
               },
               textStyle: {
                 color: '#fff',
@@ -551,7 +552,7 @@
             normal: { color: '#58c485' },
             emphasis: { color: '#ea7231' }
           },
-          data: departmentData[year].map(item => item.value)
+          data: departmentData[year].map(item => Math.log(item.value - Math.min(...departmentData[year].map(i => i.value)) + 1) + 2)
         }]
       };
     }
