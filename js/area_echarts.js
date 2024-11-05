@@ -16,7 +16,7 @@ $(function () {
                         color: '#fff'
                     }
                 },
-                roam: true,
+                roam: false,
                 itemStyle: {
                     normal: {
                         areaColor: '#4c60ff',
