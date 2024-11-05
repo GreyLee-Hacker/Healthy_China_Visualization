@@ -503,7 +503,8 @@
         },
         xAxis: {
           splitNumber: spNum,
-          max: Math.max(...departmentData[year].map(item => Math.log(item.value - Math.min(...departmentData[year].map(i => i.value)) + 1)) + 2),
+          // max: Math.max(...departmentData[year].map(item => Math.log(item.value - Math.min(...departmentData[year].map(i => i.value)) + 1)) + 2),
+          max: Math.max(...departmentData[year].map(item => item.value)) + 5,
           axisLabel: {
             show: false,
             formatter: function (params) {
@@ -552,7 +553,8 @@
             normal: { color: '#58c485' },
             emphasis: { color: '#ea7231' }
           },
-          data: departmentData[year].map(item => Math.log(item.value - Math.min(...departmentData[year].map(i => i.value)) + 1) + 2)
+          data: departmentData[year].map(item => item.value)
+          // data: departmentData[year].map(item => Math.log(item.value - Math.min(...departmentData[year].map(i => i.value)) + 1) + 2)
         }]
       };
     }
