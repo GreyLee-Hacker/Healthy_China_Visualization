@@ -10,13 +10,15 @@ $(function () {
             },
             geo: {
                 map: 'china',
+                roam: false,  // 禁用地图的缩放和拖拽
+                center: [104.5, 35.5],  // 设置地图中心点坐标
+                zoom: 1,  // 设置固定的缩放级别
                 label: {
                     emphasis: {
                         show: true,
                         color: '#fff'
                     }
                 },
-                roam: true,
                 itemStyle: {
                     normal: {
                         areaColor: '#4c60ff',
