@@ -4,32 +4,103 @@ $(function () {
         var myChart = echarts.init(document.getElementById('map_1'));
 
         var option = {
+            title: {
+                text: '2023年全国各省份健康中国行动得分情况',
+                left: 'center',
+                top: 'top'
+            },
             tooltip: {
                 trigger: 'item',
-                formatter: '{b}'
+                formatter: params => {
+                    return `${params.name}<br/>得分：${params.value?.toFixed(2) || '暂无数据'}`;
+                }
+            },
+            visualMap: {
+                type: 'continuous',
+                min: 0,
+                max: 60,  // 根据实际数据调整最大值
+                text: ['高分', '低分'],
+                realtime: false,
+                calculable: true,
+                inRange: {
+                    color: ['#fff7bc', '#fec44f', '#ec7014', '#993404']  // 从浅黄到深橙色
+                },
+                left: 'left',
+                top: 'bottom',
+                textStyle: {
+                    color: '#000'
+                },
+                formatter: value => value.toFixed(1)
             },
             geo: {
                 map: 'china',
-                roam: false,  // 禁用地图的缩放和拖拽
-                center: [104.5, 35.5],  // 设置地图中心点坐标
-                zoom: 1,  // 设置固定的缩放级别
+                roam: false,
+                center: [104.5, 35.5],
+                zoom: 1,
                 label: {
-                    emphasis: {
-                        show: true,
-                        color: '#fff'
-                    }
+                    show: true,
+                    fontSize: 8,
+                    color: '#000'
                 },
                 itemStyle: {
-                    normal: {
-                        areaColor: '#4c60ff',
-                        borderColor: '#002097'
+                    borderColor: '#666',
+                    borderWidth: 0.5,
+                    areaColor: '#fff'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        color: '#fff'
                     },
-                    emphasis: {
-                        areaColor: '#ffeb7b'
+                    itemStyle: {
+                        areaColor: '#ff9933'
                     }
                 }
             },
-            series: []
+            series: [{
+                name: '2023年总得分',
+                type: 'map',
+                mapType: 'china',
+                roam: false,
+                data: [
+                    { name: '北京', value: 45.23 },
+                    { name: '天津', value: 38.56 },
+                    { name: '河北', value: 32.45 },
+                    { name: '山西', value: 35.01 },
+                    { name: '内蒙古', value: 28.76 },
+                    { name: '辽宁', value: 42.13 },
+                    { name: '吉林', value: 33.89 },
+                    { name: '黑龙江', value: 29.34 },
+                    { name: '上海', value: 52.67 },
+                    { name: '江苏', value: 48.92 },
+                    { name: '浙江', value: 29.60 },
+                    { name: '安徽', value: 31.78 },
+                    { name: '福建', value: 39.45 },
+                    { name: '江西', value: 27.89 },
+                    { name: '山东', value: 44.56 },
+                    { name: '河南', value: 36.78 },
+                    { name: '湖北', value: 41.23 },
+                    { name: '湖南', value: 38.91 },
+                    { name: '广东', value: 51.34 },
+                    { name: '广西', value: 33.67 },
+                    { name: '海南', value: 25.89 },
+                    { name: '重庆', value: 40.12 },
+                    { name: '四川', value: 55.26 },
+                    { name: '贵州', value: 30.45 },
+                    { name: '云南', value: 37.28 },
+                    { name: '西藏', value: 43.54 },
+                    { name: '陕西', value: 41.89 },
+                    { name: '甘肃', value: 26.78 },
+                    { name: '青海', value: 28.91 },
+                    { name: '宁夏', value: 31.23 },
+                    { name: '新疆', value: 18.49 }
+                ],
+                label: {
+                    show: true,
+                    fontSize: 8,
+                    color: '#000'
+                }
+            }]
         };
 
         myChart.setOption(option);
