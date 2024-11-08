@@ -146,7 +146,7 @@
         </div>
       </li>
     </ul>
-    <!-- <div class="copyright">更多模板关注公众号"DreamCoders"免费获取</div> -->
+    <div class="copyright">中国人民大学国家治理大数据和人工智能创新平台健康与医改政策子实验室</div>
   </div>
 
   <div class="mainbox2">
@@ -504,12 +504,13 @@
         },
         xAxis: {
           splitNumber: spNum,
+          // max: Math.max(...departmentData[year].map(item => Math.log(item.value - Math.min(...departmentData[year].map(i => i.value)) + 1)) + 2),
           max: Math.max(...departmentData[year].map(item => item.value)) + 5,
           axisLabel: {
             show: false,
-            formatter: function (v) {
-              var _v = (v).toFixed(2);
-              return _v == 0 ? _v : _v;
+            formatter: function (params) {
+              const department = departmentData[year].find(item => item.name === params.name);
+              return department ? department.value.toFixed(2) : '';
             }
           },
           axisLine: { show: false },
@@ -539,7 +540,8 @@
               show: true,
               position: 'inside',
               formatter: function (params) {
-                return params.value.toFixed(2);
+                const department = departmentData[year].find(item => item.name === params.name);
+                return department ? department.value.toFixed(2) : '';
               },
               textStyle: {
                 color: '#fff',
@@ -553,6 +555,7 @@
             emphasis: { color: '#ea7231' }
           },
           data: departmentData[year].map(item => item.value)
+          // data: departmentData[year].map(item => Math.log(item.value - Math.min(...departmentData[year].map(i => i.value)) + 1) + 2)
         }]
       };
     }

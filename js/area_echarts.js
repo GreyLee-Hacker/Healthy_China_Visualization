@@ -42,6 +42,7 @@ $(function () {
                     fontSize: 8,
                     color: '#000'
                 },
+                roam: false,
                 itemStyle: {
                     borderColor: '#666',
                     borderWidth: 0.5,
