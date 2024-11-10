@@ -95,7 +95,6 @@
                   <li style="float: none; display: inline-block;">中国地图</li>
                 </ul>
               </div>
-
             </div>
           </div>
         </div>
@@ -168,7 +167,7 @@
         <div class="boxall" style="height:100%">
           <div class="alltitle">中央维度
             <div class="pulll_right sebtn central-btn">
-              <a href="javascript:void(0)" class="active" onclick="switchView('总得分')">总得分</a>
+              <a href="javascript:void(0)" class="active" onclick="switchView('健康中国建设发展指数')">健康中国建设发展指数</a>
               <a href="javascript:void(0)" onclick="switchView('政策数量')">政策数量</a>
               <a href="javascript:void(0)" onclick="switchView('政策质量')">政策质量</a>
               <a href="javascript:void(0)" onclick="switchView('协同机制')">协同机制</a>
@@ -226,8 +225,8 @@
       // 将 switchView 函数暴露到全局作用域
       window.switchView = switchView;
 
-      // 初始显示总得分
-      switchView('总得分');
+      // 初始显示健康中国建设发展指数
+      switchView('健康中国建设发展指数');
 
       // 监听窗口大小变化
       window.addEventListener('resize', function () {
@@ -238,7 +237,7 @@
     });
 
     function getOption(type) {
-      const dataKey = type === '总得分' ? '健康中国建设发展测度指数' : type;
+      const dataKey = type === '健康中国建设发展指数' ? '健康中国建设发展测度指数' : type;
       const seriesData = data.map(item => item[dataKey]);
       const years = data.map(item => item["年份"]);
 
@@ -323,7 +322,7 @@
         },
         yAxis: {
           type: 'value',
-          name: type === '总得分' ? '指数' : '数值',
+          name: type === '健康中国建设发展指数' ? '指数' : '数值',
           nameTextStyle: {
             color: 'rgba(255,255,255,.6)'
           },
@@ -534,7 +533,7 @@
         }],
         series: [{
           type: 'bar',
-          name: '总得分',
+          name: '健康中国建设发展指数',
           label: {
             normal: {
               show: true,
@@ -790,7 +789,7 @@
         }],
         series: [{
           type: 'bar',
-          name: '总得分',
+          name: '健康中国建设发展指数',
           label: {
             normal: {
               show: true,
