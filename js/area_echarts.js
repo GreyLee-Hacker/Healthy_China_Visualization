@@ -5,14 +5,14 @@ $(function () {
 
         var option = {
             // title: {
-            //     text: '2023年全国各省份健康中国行动得分情况',
+            //     text: '2023年全国各省份健康中国行动健康中国建设<br>发展指数情况',
             //     left: 'center',
             //     top: 'top'
             // },
             tooltip: {
                 trigger: 'item',
                 formatter: params => {
-                    return `${params.name}<br/>得分：${params.value?.toFixed(2) || '暂无数据'}`;
+                    return `${params.name}<br/>健康中国建设<br>发展指数：${params.value?.toFixed(2) || '暂无数据'}`;
                 }
             },
             visualMap: {
@@ -627,7 +627,7 @@ $(function () {
                 },
                 yAxis: {
                     type: 'value',
-                    name: type === 'total_score' ? '得分' : '',
+                    name: type === 'total_score' ? '健康中国建设<br>发展指数' : '',
                     nameTextStyle: {
                         color: 'rgba(255,255,255,.6)'
                     },
