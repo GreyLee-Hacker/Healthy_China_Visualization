@@ -84,9 +84,17 @@ $(function () {
                 updateBt03('政策网络', 85.7);
                 break;
             case 'central':
-                updateBt01('政策数量', 75.0);
-                updateBt02('政策质量', 85.0);
-                updateBt03('政策网络', 60.0);
+                // 根据中央维度的当前选中状态来更新饼图
+                const currentView = $('.central-btn a.active').text();
+                if (currentView === '政策数量') {
+                    updateBt01('全方位干预健康影响因素领域发文量（件）', 68);
+                    updateBt02('维护全生命周期健康领域发文量（件）', 74);
+                    updateBt03('防控重大疾病领域发文量（件）', 59);
+                } else {
+                    updateBt01('政策数量', 75.0);
+                    updateBt02('政策质量', 85.0);
+                    updateBt03('政策网络', 60.0);
+                }
                 break;
         }
     }
@@ -222,4 +230,11 @@ $(function () {
             }]
         };
     }
+
+    // 在文件末尾添加以下代码
+    window.updateBt01 = updateBt01;
+    window.updateBt02 = updateBt02;
+    window.updateBt03 = updateBt03;
+    window.restorePieCharts = restorePieCharts;
+
 });

@@ -399,6 +399,19 @@
         myChart.clear();
         myChart.setOption(getOption(type));
       }
+
+      // 如果当前是政策数量视图，更新饼图
+      if (type === '政策数量') {
+        // 使用全局函数
+        window.updateBt01('全方位干预健康影响因素领域发文量（件）', 68);
+        window.updateBt02('维护全生命周期健康领域发文量（件）', 74);
+        window.updateBt03('防控重大疾病领域发文量（件）', 59);
+      } else {
+        // 使用全局函数
+        window.updateBt01('政策数量', 75.0);
+        window.updateBt02('政策质量', 85.0);
+        window.updateBt03('政策网络', 60.0);
+      }
     }
   </script>
 
