@@ -175,10 +175,10 @@
         <div class="boxall" style="height:100%">
           <div class="alltitle">中央维度
             <div class="pulll_right sebtn central-btn">
-              <a href="javascript:void(0)" class="active" onclick="switchView('健康中国建设发展指数')">健康中国建设发展指数</a>
-              <a href="javascript:void(0)" onclick="switchView('政策数量')">政策数量</a>
-              <a href="javascript:void(0)" onclick="switchView('政策质量')">政策质量</a>
-              <a href="javascript:void(0)" onclick="switchView('政策网络')">政策网络</a>
+              <a href="javascript:void(0)" class="active" onclick="switchCentralView('健康中国建设发展指数')">健康中国建设发展指数</a>
+              <a href="javascript:void(0)" onclick="switchCentralView('政策数量')">政策数量</a>
+              <a href="javascript:void(0)" onclick="switchCentralView('政策质量')">政策质量</a>
+              <a href="javascript:void(0)" onclick="switchCentralView('政策网络')">政策网络</a>
             </div>
           </div>
           <div class="boxnav" id="echart4" style="width: 100%; height: 200px;"></div>
@@ -230,11 +230,11 @@
       // 初始化图表实例
       myChart = echarts.init(document.getElementById('echart4'));
 
-      // 将 switchView 函数暴露到全局作用域
-      window.switchView = switchView;
+      // 将 switchCentralView 函数暴露到全局作用域
+      window.switchCentralView = switchCentralView;
 
       // 初始显示健康中国建设发展指数
-      switchView('健康中国建设发展指数');
+      switchCentralView('健康中国建设发展指数');
 
       // 监听窗口大小变化
       window.addEventListener('resize', function () {
@@ -385,7 +385,7 @@
       };
     }
 
-    function switchView(type) {
+    function switchCentralView(type) {
       // 更新按钮状态，只选择中央维度的按钮
       $('.central-btn a').each(function () {
         $(this).removeClass('active');
