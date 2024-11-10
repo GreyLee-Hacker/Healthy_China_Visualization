@@ -309,8 +309,20 @@ $(function () {
             // },
             tooltip: {
                 trigger: 'item',
+                confine: true,
+                position: function (point, params, dom, rect, size) {
+                    // 计算tooltip的理想位置，确保更居中
+                    return ['45%', '45%'];
+                },
                 formatter: params => {
                     return `${params.name}<br/>${params.seriesName}：${params.value?.toFixed(2) || '暂无数据'}`;
+                },
+                backgroundColor: 'rgba(255, 255, 255, 0.7)', // 增加透明度
+                borderColor: '#ccc',
+                borderWidth: 1,
+                padding: [5, 10],
+                textStyle: {
+                    color: '#333'
                 }
             },
             visualMap: {
