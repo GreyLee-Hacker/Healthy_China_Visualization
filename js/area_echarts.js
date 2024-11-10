@@ -3,6 +3,242 @@ $(function () {
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('map_1'));
 
+        // 添加按钮组定义
+        var buttons = [
+            { id: 'totalScore', text: '总得分', active: true },
+            { id: 'policyCount', text: '政策数量', active: false },
+            { id: 'policyQuality', text: '政策质量', active: false },
+            { id: 'coordination', text: '协同机制', active: false }
+        ];
+
+        // 创建按钮容器
+        var buttonContainer = document.createElement('div');
+        buttonContainer.style.position = 'absolute';
+        buttonContainer.style.right = '400px';  // 从20px改为120px，将按钮组向左移动
+        buttonContainer.style.top = '60px';
+        buttonContainer.style.zIndex = '1000';
+        document.getElementById('map_1').appendChild(buttonContainer);
+
+        // 创建按钮
+        // ... existing code ...
+
+        // 创建按钮
+        // ... existing code ...
+
+        // 创建按钮
+        buttons.forEach(button => {
+            var btn = document.createElement('button');
+            btn.innerText = button.text;
+            btn.style.margin = '0 3px';
+            btn.style.padding = '2.5px 7px';
+            btn.style.cursor = 'pointer';
+            btn.style.border = '1px solid #d9d9d9';
+            btn.style.borderRadius = '4px';
+            btn.style.backgroundColor = button.active ? '#1890ff' : 'transparent';
+            btn.style.color = button.active ? 'white' : '#f0f0f0';  // 改为亮色
+            btn.style.fontSize = '14px';
+            btn.style.outline = 'none';
+
+            btn.onmouseover = function () {
+                if (!button.active) {
+                    btn.style.borderColor = '#40a9ff';
+                    btn.style.color = '#40a9ff';
+                }
+            };
+
+            btn.onmouseout = function () {
+                if (!button.active) {
+                    btn.style.borderColor = '#d9d9d9';
+                    btn.style.color = '#f0f0f0';  // 改为亮色
+                }
+            };
+
+            btn.onclick = function () {
+                buttonContainer.querySelectorAll('button').forEach(b => {
+                    b.style.backgroundColor = 'transparent';
+                    b.style.color = '#f0f0f0';  // 改为亮色
+                    b.style.borderColor = '#d9d9d9';
+                });
+                btn.style.backgroundColor = '#1890ff';
+                btn.style.color = 'white';
+                btn.style.borderColor = '#1890ff';
+                updateMapData(button.id);
+                buttons.forEach(b => b.active = (b.id === button.id));
+            };
+            buttonContainer.appendChild(btn);
+        });
+
+        // ... rest of the code ...
+
+        // 定义不同指标的数据
+        const mapData = {
+            totalScore: [
+                { name: '北京', value: 45.23 },
+                { name: '天津', value: 38.56 },
+                { name: '河北', value: 32.45 },
+                { name: '山西', value: 35.01 },
+                { name: '内蒙古', value: 28.76 },
+                { name: '辽宁', value: 42.13 },
+                { name: '吉林', value: 33.89 },
+                { name: '黑龙江', value: 29.34 },
+                { name: '上海', value: 52.67 },
+                { name: '江苏', value: 48.92 },
+                { name: '浙江', value: 29.60 },
+                { name: '安徽', value: 31.78 },
+                { name: '福建', value: 39.45 },
+                { name: '江西', value: 27.89 },
+                { name: '山东', value: 44.56 },
+                { name: '河南', value: 36.78 },
+                { name: '湖北', value: 41.23 },
+                { name: '湖南', value: 38.91 },
+                { name: '广东', value: 51.34 },
+                { name: '广西', value: 33.67 },
+                { name: '海南', value: 25.89 },
+                { name: '重庆', value: 40.12 },
+                { name: '四川', value: 55.26 },
+                { name: '贵州', value: 30.45 },
+                { name: '云南', value: 37.28 },
+                { name: '西藏', value: 43.54 },
+                { name: '陕西', value: 41.89 },
+                { name: '甘肃', value: 26.78 },
+                { name: '青海', value: 28.91 },
+                { name: '宁夏', value: 31.23 },
+                { name: '台湾', value: 0.00 },
+                { name: '南海诸岛', value: 0.00 },
+                { name: '新疆', value: 18.49 }
+            ],
+            policyCount: [{ name: '北京', value: 23.78 },
+            { name: '天津', value: 21.45 },
+            { name: '河北', value: 19.87 },
+            { name: '山西', value: 18.56 },
+            { name: '内蒙古', value: 16.42 },
+            { name: '辽宁', value: 20.13 },
+            { name: '吉林', value: 17.89 },
+            { name: '黑龙江', value: 19.24 },
+            { name: '上海', value: 28.91 },
+            { name: '江苏', value: 89.45 },
+            { name: '浙江', value: 17.54 },
+            { name: '安徽', value: 81.93 },
+            { name: '福建', value: 22.67 },
+            { name: '江西', value: 21.34 },
+            { name: '山东', value: 25.78 },
+            { name: '河南', value: 24.56 },
+            { name: '湖北', value: 26.89 },
+            { name: '湖南', value: 23.45 },
+            { name: '广东', value: 27.92 },
+            { name: '广西', value: 20.45 },
+            { name: '海南', value: 18.78 },
+            { name: '重庆', value: 28.47 },
+            { name: '四川', value: 25.67 },
+            { name: '贵州', value: 21.89 },
+            { name: '云南', value: 27.07 },
+            { name: '西藏', value: 12.66 },
+            { name: '陕西', value: 24.56 },
+            { name: '甘肃', value: 16.78 },
+            { name: '青海', value: 15.45 },
+            { name: '宁夏', value: 14.89 },
+            { name: '台湾', value: 0.00 },
+            { name: '南海诸岛', value: 0.00 },
+            { name: '新疆', value: 15.86 }], // 预留政策数量数据接口
+            policyQuality: [{ name: '北京', value: 76.50 },
+            { name: '天津', value: 72.34 },
+            { name: '河北', value: 68.92 },
+            { name: '山西', value: 65.78 },
+            { name: '内蒙古', value: 60.28 },
+            { name: '辽宁', value: 64.56 },
+            { name: '吉林', value: 62.34 },
+            { name: '黑龙江', value: 63.89 },
+            { name: '上海', value: 82.45 },
+            { name: '江苏', value: 98.67 },
+            { name: '浙江', value: 66.42 },
+            { name: '台湾', value: 0.00 },
+            { name: '南海诸岛', value: 0.00 },
+            { name: '安徽', value: 97.35 },
+            { name: '福建', value: 71.23 },
+            { name: '江西', value: 69.87 },
+            { name: '山东', value: 74.56 },
+            { name: '河南', value: 73.21 },
+            { name: '湖北', value: 75.89 },
+            { name: '湖南', value: 72.34 },
+            { name: '广东', value: 77.89 },
+            { name: '广西', value: 67.45 },
+            { name: '海南', value: 65.78 },
+            { name: '重庆', value: 62.87 },
+            { name: '四川', value: 74.23 },
+            { name: '贵州', value: 70.12 },
+            { name: '云南', value: 81.69 },
+            { name: '西藏', value: 58.84 },
+            { name: '陕西', value: 73.45 },
+            { name: '甘肃', value: 61.23 },
+            { name: '青海', value: 59.87 },
+            { name: '宁夏', value: 60.45 },
+            { name: '新疆', value: 71.65 }], // 预留政策质量数据接口
+            coordination: [{ name: '北京', value: 55.87 },
+            { name: '天津', value: 51.23 },
+            { name: '河北', value: 48.76 },
+            { name: '山西', value: 45.89 },
+            { name: '内蒙古', value: 77.42 },
+            { name: '辽宁', value: 47.23 },
+            { name: '吉林', value: 44.56 },
+            { name: '黑龙江', value: 46.78 },
+            { name: '上海', value: 58.92 },
+            { name: '江苏', value: 82.34 },
+            { name: '浙江', value: 37.78 },
+            { name: '台湾', value: 0.00 },
+            { name: '南海诸岛', value: 0.00 },
+            { name: '安徽', value: 77.48 },
+            { name: '福建', value: 52.45 },
+            { name: '江西', value: 49.87 },
+            { name: '山东', value: 56.78 },
+            { name: '河南', value: 54.23 },
+            { name: '湖北', value: 57.89 },
+            { name: '湖南', value: 53.45 },
+            { name: '广东', value: 59.92 },
+            { name: '广西', value: 47.89 },
+            { name: '海南', value: 45.67 },
+            { name: '重庆', value: 48.80 },
+            { name: '四川', value: 56.34 },
+            { name: '贵州', value: 50.12 },
+            { name: '云南', value: 41.19 },
+            { name: '西藏', value: 18.11 },
+            { name: '陕西', value: 53.78 },
+            { name: '甘肃', value: 43.23 },
+            { name: '青海', value: 40.56 },
+            { name: '宁夏', value: 41.89 },
+            { name: '新疆', value: 8.99 }] // 预留协同机制数据接口
+        };
+
+        function updateMapData(type) {
+            var currentOption = myChart.getOption();
+            currentOption.series[0].name = buttons.find(b => b.id === type).text;
+            currentOption.series[0].data = mapData[type];
+
+            // 更新标题
+            currentOption.title.text = `2023年全国各省份${buttons.find(b => b.id === type).text}情况`;
+
+            // 根据不同指标调整visualMap的范围
+            switch (type) {
+                case 'totalScore':
+                    currentOption.visualMap.min = 15;
+                    currentOption.visualMap.max = 60;
+                    break;
+                case 'policyCount':
+                    currentOption.visualMap.min = 0;
+                    currentOption.visualMap.max = 100;
+                    break;
+                case 'policyQuality':
+                    currentOption.visualMap.max = 80;
+                    currentOption.visualMap.min = 15;
+                    break;
+                case 'coordination':
+                    currentOption.visualMap.min = 0;
+                    currentOption.visualMap.max = 80;
+                    break;
+            }
+
+            myChart.setOption(currentOption);
+        }
+
         var option = {
             title: {
                 text: '2023年全国各省份健康中国行动得分情况',
@@ -12,18 +248,18 @@ $(function () {
             tooltip: {
                 trigger: 'item',
                 formatter: params => {
-                    return `${params.name}<br/>得分：${params.value?.toFixed(2) || '暂无数据'}`;
+                    return `${params.name}<br/>${params.seriesName}：${params.value?.toFixed(2) || '暂无数据'}`;
                 }
             },
             visualMap: {
                 type: 'continuous',
-                min: 0,
-                max: 60,  // 根据实际数据调整最大值
-                text: ['高分', '低分'],
+                min: 15,
+                max: 75,
+                text: ['高', '低'],
                 realtime: false,
                 calculable: true,
                 inRange: {
-                    color: ['#fff7bc', '#fec44f', '#ec7014', '#993404']  // 从浅黄到深橙色
+                    color: ['#fff7bc', '#fec44f', '#ec7014', '#993404']
                 },
                 left: 'left',
                 top: 'bottom',
@@ -63,39 +299,7 @@ $(function () {
                 type: 'map',
                 mapType: 'china',
                 roam: false,
-                data: [
-                    { name: '北京', value: 45.23 },
-                    { name: '天津', value: 38.56 },
-                    { name: '河北', value: 32.45 },
-                    { name: '山西', value: 35.01 },
-                    { name: '内蒙古', value: 28.76 },
-                    { name: '辽宁', value: 42.13 },
-                    { name: '吉林', value: 33.89 },
-                    { name: '黑龙江', value: 29.34 },
-                    { name: '上海', value: 52.67 },
-                    { name: '江苏', value: 48.92 },
-                    { name: '浙江', value: 29.60 },
-                    { name: '安徽', value: 31.78 },
-                    { name: '福建', value: 39.45 },
-                    { name: '江西', value: 27.89 },
-                    { name: '山东', value: 44.56 },
-                    { name: '河南', value: 36.78 },
-                    { name: '湖北', value: 41.23 },
-                    { name: '湖南', value: 38.91 },
-                    { name: '广东', value: 51.34 },
-                    { name: '广西', value: 33.67 },
-                    { name: '海南', value: 25.89 },
-                    { name: '重庆', value: 40.12 },
-                    { name: '四川', value: 55.26 },
-                    { name: '贵州', value: 30.45 },
-                    { name: '云南', value: 37.28 },
-                    { name: '西藏', value: 43.54 },
-                    { name: '陕西', value: 41.89 },
-                    { name: '甘肃', value: 26.78 },
-                    { name: '青海', value: 28.91 },
-                    { name: '宁夏', value: 31.23 },
-                    { name: '新疆', value: 18.49 }
-                ],
+                data: mapData.totalScore,
                 label: {
                     show: true,
                     fontSize: 8,
@@ -103,7 +307,6 @@ $(function () {
                 }
             }]
         };
-
         myChart.setOption(option);
 
         // 监听地图的点击事件
@@ -117,7 +320,6 @@ $(function () {
             myChart.resize();
         });
     }
-
     // 定义内蒙古数据
     const nmData = [
         { "省市名称": "内蒙古", "年份": "2016年", "总得分": 13.8480981247, "政策数量": 3.6556266988, "政策质量": 43.7808290696, "协同机制": 0.4274898156, "防控重大疾病": 5, "全方位干预健康影响因素": 4, "维护全生命周期健康": 2, "按时完成率": 15.2173913043, "总体完成率": 93.4782608696, "平均完成月数": 33.9302325581, "发文联合率": 0.0, "平均协作规模": 1.0, "参与部门数量": 6 },
