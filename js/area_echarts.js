@@ -894,7 +894,7 @@ $(function () {
                 },
                 yAxis: {
                     type: 'value',
-                    name: type === 'total_score' ? '健康中国建设<br>发展指数' : '',
+                    name: type === 'total_score' ? '健康中国建设\n发展指数' : '',
                     nameTextStyle: {
                         color: 'rgba(255,255,255,.6)'
                     },
