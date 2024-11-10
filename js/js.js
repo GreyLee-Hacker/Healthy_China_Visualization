@@ -87,9 +87,9 @@ $(function () {
                 // 根据中央维度的当前选中状态来更新饼图
                 const currentView = $('.central-btn a.active').text();
                 if (currentView === '政策数量') {
-                    updateBt01('全方位干预健康影响因素领域发文量（件）', 68, 100);
-                    updateBt02('维护全生命周期健康领域发文量（件）', 74, 100);
-                    updateBt03('防控重大疾病领域发文量（件）', 59, 100);
+                    updateBt01('全方位干预健康影响因素领域\n发文量（件）', 68, 100);
+                    updateBt02('维护全生命周期健康领域\n发文量（件）', 74, 100);
+                    updateBt03('防控重大疾病领域\n发文量（件）', 59, 100);
                 } else if (currentView === '政策质量') {
                     updateBt01('当年完成率（%）', 84.06, 100);
                     updateBt02('总体完成率（%）', 92.75, 100);
