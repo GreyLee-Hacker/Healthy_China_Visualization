@@ -84,9 +84,25 @@ $(function () {
                 updateBt03('政策网络', 85.7);
                 break;
             case 'central':
-                updateBt01('政策数量', 75.0);
-                updateBt02('政策质量', 85.0);
-                updateBt03('政策网络', 60.0);
+                // 根据中央维度的当前选中状态来更新饼图
+                const currentView = $('.central-btn a.active').text();
+                if (currentView === '政策数量') {
+                    updateBt01('全方位干预健康影响因素领域\n发文量（件）', 68, 100);
+                    updateBt02('维护全生命周期健康领域\n发文量（件）', 74, 100);
+                    updateBt03('防控重大疾病领域\n发文量（件）', 59, 100);
+                } else if (currentView === '政策质量') {
+                    updateBt01('当年完成率（%）', 84.06, 100);
+                    updateBt02('总体完成率（%）', 92.75, 100);
+                    updateBt03('平均发文月数（月）', 4.89, 12);
+                } else if (currentView === '政策网络') {
+                    updateBt01('参与部门数量（家）', 62, 100);
+                    updateBt02('平均协作规模（家/件）', 2.66, 5);
+                    updateBt03('联合发文率（%）', 41.56, 100);
+                } else {
+                    updateBt01('政策数量', 75.0, 100);
+                    updateBt02('政策质量', 85.0, 100);
+                    updateBt03('政策网络', 60.0, 100);
+                }
                 break;
         }
     }
@@ -98,25 +114,25 @@ $(function () {
         bt03();
     }
 
-    // 更新单个饼图的函数
-    function updateBt01(title, score) {
+    // 更新单个饼图的函数，增加 totalScore 参数
+    function updateBt01(title, score, totalScore = 100) {
         var myChart = echarts.init(document.getElementById('bt01'));
-        var remainingScore = 100 - score; // 计算与满分的差值
-        var option = getBasePieOption(title, score, remainingScore, score);
+        var remainingScore = totalScore - score; // 计算与总分的差值
+        var option = getBasePieOption(title, score, remainingScore, score, totalScore);
         myChart.setOption(option);
     }
 
-    function updateBt02(title, score) {
+    function updateBt02(title, score, totalScore = 100) {
         var myChart = echarts.init(document.getElementById('bt02'));
-        var remainingScore = 100 - score;
-        var option = getBasePieOption(title, score, remainingScore, score);
+        var remainingScore = totalScore - score;
+        var option = getBasePieOption(title, score, remainingScore, score, totalScore);
         myChart.setOption(option);
     }
 
-    function updateBt03(title, score) {
+    function updateBt03(title, score, totalScore = 100) {
         var myChart = echarts.init(document.getElementById('bt03'));
-        var remainingScore = 100 - score;
-        var option = getBasePieOption(title, score, remainingScore, score);
+        var remainingScore = totalScore - score;
+        var option = getBasePieOption(title, score, remainingScore, score, totalScore);
         myChart.setOption(option);
     }
 
@@ -153,11 +169,11 @@ $(function () {
         });
     }
 
-    // 获取基础饼图配置的函数
-    function getBasePieOption(title, score, remainingScore, displayScore) {
+    // 获取基础饼图配置的函数，修改基础饼图配置函数，增加 totalScore 参数
+    function getBasePieOption(title, score, remainingScore, displayScore, totalScore = 100) {
         return {
             title: [{
-                text: displayScore.toFixed(1),  // 直接显示健康中国建设\n发展指数，保留一位小数
+                text: displayScore.toFixed(1),
                 x: 'center', y: '54%',
                 textStyle: {
                     fontSize: 18,
@@ -166,13 +182,14 @@ $(function () {
                     color: '#fff'
                 }
             }, {
-                text: '健康中国建设\n发展指数',  // 将"已完成"改为"健康中国建设\n发展指数"
+                text: '健康中国建设\n发展指数',
                 x: 'center', y: '68%',
                 textStyle: {
                     fontSize: 10,
                     fontWeight: 'normal',
                     fontStyle: 'normal',
-                    color: 'rgba(255,255,255,.6)'
+                    color: 'rgba(255,255,255,.6)',
+                    lineHeight: 12
                 }
             }, {
                 text: title,
@@ -187,9 +204,9 @@ $(function () {
                 trigger: 'item',
                 formatter: function (params) {
                     if (params.name === '健康中国建设\n发展指数') {
-                        return `${params.name}: ${params.value.toFixed(1)}分`;
+                        return `${params.name}: ${params.value.toFixed(1)}/${totalScore.toFixed(1)}`;
                     } else {
-                        return `差值: ${params.value.toFixed(1)}分`;
+                        return `差值: ${params.value.toFixed(1)}`;
                     }
                 }
             },
@@ -222,4 +239,11 @@ $(function () {
             }]
         };
     }
+
+    // 在文件末尾添加以下代码
+    window.updateBt01 = updateBt01;
+    window.updateBt02 = updateBt02;
+    window.updateBt03 = updateBt03;
+    window.restorePieCharts = restorePieCharts;
+
 });

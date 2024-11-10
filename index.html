@@ -399,6 +399,26 @@
         myChart.clear();
         myChart.setOption(getOption(type));
       }
+
+      // 根据不同类型更新饼图
+      if (type === '政策数量') {
+        // 使用全局函数
+        window.updateBt01('全方位干预健康影响因素领域\n发文量（件）', 68, 100);
+        window.updateBt02('维护全生命周期健康领域\n发文量（件）', 74, 100);
+        window.updateBt03('防控重大疾病领域\n发文量（件）', 59, 100);
+      } else if (type === '政策质量') {
+        window.updateBt01('当年完成率（%）', 84.06, 100);
+        window.updateBt02('总体完成率（%）', 92.75, 100);
+        window.updateBt03('平均发文月数（月）', 4.89, 12);
+      } else if (type === '政策网络') {
+        window.updateBt01('参与部门数量（家）', 62, 100);
+        window.updateBt02('平均协作规模（家/件）', 2.66, 5);
+        window.updateBt03('联合发文率（%）', 41.56, 100);
+      } else {
+        window.updateBt01('政策数量', 75.0, 100);
+        window.updateBt02('政策质量', 85.0, 100);
+        window.updateBt03('政策网络', 60.0, 100);
+      }
     }
   </script>
 
