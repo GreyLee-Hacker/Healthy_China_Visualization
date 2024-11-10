@@ -5,7 +5,7 @@ $(function () {
 
         // 添加按钮组定义
         var buttons = [
-            { id: 'totalScore', text: '总得分', active: true },
+            { id: 'totalScore', text: '发展指数', active: true },
             { id: 'policyCount', text: '政策数量', active: false },
             { id: 'policyQuality', text: '政策质量', active: false },
             { id: 'coordination', text: '协同机制', active: false }
@@ -209,34 +209,96 @@ $(function () {
         };
 
         function updateMapData(type) {
-            var currentOption = myChart.getOption();
-            currentOption.series[0].name = buttons.find(b => b.id === type).text;
-            currentOption.series[0].data = mapData[type];
 
-            // 更新标题
-            currentOption.title.text = `2023年全国各省份${buttons.find(b => b.id === type).text}情况`;
+            // 创建新的配置对象而不是获取当前配置
+            var option = {
+                // title: {
+                //     text: `2023年全国各省份${buttons.find(b => b.id === type).text}情况`,
+                //     left: 'center',
+                //     top: 'top'
+                // },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: params => {
+                        return `${params.name}<br/>${params.seriesName}：${params.value?.toFixed(2) || '暂无数据'}`;
+                    }
+                },
+                visualMap: {
+                    type: 'continuous',
+                    realtime: false,
+                    calculable: true,
+                    inRange: {
+                        color: ['#fff7bc', '#fec44f', '#ec7014', '#993404']
+                    },
+                    left: 'left',
+                    top: 'bottom',
+                    textStyle: {
+                        color: '#000'
+                    },
+                    formatter: value => value.toFixed(1)
+                },
+                geo: {
+                    map: 'china',
+                    roam: false,
+                    center: [104.5, 35.5],
+                    zoom: 1,
+                    label: {
+                        show: true,
+                        fontSize: 8,
+                        color: '#000'
+                    },
+                    itemStyle: {
+                        borderColor: '#666',
+                        borderWidth: 0.5,
+                        areaColor: '#fff'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            color: '#fff'
+                        },
+                        itemStyle: {
+                            areaColor: '#ff9933'
+                        }
+                    }
+                },
+                series: [{
+                    name: buttons.find(b => b.id === type).text,
+                    type: 'map',
+                    mapType: 'china',
+                    roam: false,
+                    data: mapData[type],
+                    label: {
+                        show: true,
+                        fontSize: 8,
+                        color: '#000'
+                    }
+                }]
+            };
 
             // 根据不同指标调整visualMap的范围
             switch (type) {
                 case 'totalScore':
-                    currentOption.visualMap.min = 15;
-                    currentOption.visualMap.max = 60;
+                    option.visualMap.min = 15;
+                    option.visualMap.max = 60;
                     break;
                 case 'policyCount':
-                    currentOption.visualMap.min = 0;
-                    currentOption.visualMap.max = 100;
+                    option.visualMap.min = 0;
+                    option.visualMap.max = 100;
                     break;
                 case 'policyQuality':
-                    currentOption.visualMap.max = 80;
-                    currentOption.visualMap.min = 15;
+                    option.visualMap.min = 15;
+                    option.visualMap.max = 80;
                     break;
                 case 'coordination':
-                    currentOption.visualMap.min = 0;
-                    currentOption.visualMap.max = 80;
+                    option.visualMap.min = 0;
+                    option.visualMap.max = 80;
                     break;
             }
 
-            myChart.setOption(currentOption);
+            // 完全重置图表配置
+            myChart.clear();
+            myChart.setOption(option, true);
         }
 
         var option = {
@@ -254,7 +316,7 @@ $(function () {
             visualMap: {
                 type: 'continuous',
                 min: 15,
-                max: 75,
+                max: 70,
                 text: ['高', '低'],
                 realtime: false,
                 calculable: true,
@@ -784,6 +846,7 @@ $(function () {
         let provinceChart = echarts.init(chartDiv);
 
         function updateChart(type, mainIndicator, indicators) {
+            provinceChart.clear();
             let option = {
                 title: {
                     text: type === 'total_score' ? '健康中国建设发展指数趋势' :
