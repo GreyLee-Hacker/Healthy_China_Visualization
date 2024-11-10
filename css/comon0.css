@@ -325,7 +325,7 @@ body {
 	border-bottom: 2px solid #02a6b5;
 } */
 
-.barbox li:before {
+/* .barbox li:before {
 	position: absolute;
 	content: "";
 	height: 50%;
@@ -333,7 +333,7 @@ body {
 	background: rgba(255, 255, 255, .2);
 	right: 0;
 	top: 25%;
-}
+} */
 
 .barbox {
 	border: 1px solid rgba(25, 186, 139, .17);
