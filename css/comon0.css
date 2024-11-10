@@ -304,13 +304,13 @@ body {
 	position: relative;
 }
 
-.barbox:before,
+/* .barbox:before,
 .barbox:after {
 	position: absolute;
 	width: .3rem;
 	height: .1rem;
 	content: "";
-}
+} */
 
 /* .barbox:before {
 	border-left: 2px solid #02a6b5;
