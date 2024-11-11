@@ -74,9 +74,28 @@ $(function () {
                 updateBt03('政策网络', 65.8);
                 break;
             case 'department':
-                updateBt01('政策数量', 71.2);
-                updateBt02('政策质量', 68.9);
-                updateBt03('政策网络', 73.4);
+                const currentDepartmentView = $('.department-btn a.active').text();
+                if (currentDepartmentView === '2019') {
+                    updateBt01('政策数量', 71.2);
+                    updateBt02('政策质量', 68.9);
+                    updateBt03('政策网络', 73.4);
+                } else if (currentDepartmentView === '2020') {
+                    updateBt01('政策数量', 82.5);
+                    updateBt02('政策质量', 78.3);
+                    updateBt03('政策网络', 65.8);
+                } else if (currentDepartmentView === '2021') {
+                    updateBt01('政策数量', 88.6);
+                    updateBt02('政策质量', 92.1);
+                    updateBt03('政策网络', 85.7);
+                } else if (currentDepartmentView === '2022') {
+                    updateBt01('政策数量', 92.1);
+                    updateBt02('政策质量', 95.4);
+                    updateBt03('政策网络', 90.3);
+                } else {
+                    updateBt01('政策数量', 71.2);
+                    updateBt02('政策质量', 69.9);
+                    updateBt03('政策网络', 73.4);
+                }
                 break;
             case 'action':
                 updateBt01('政策数量', 88.6);
@@ -85,16 +104,16 @@ $(function () {
                 break;
             case 'central':
                 // 根据中央维度的当前选中状态来更新饼图
-                const currentView = $('.central-btn a.active').text();
-                if (currentView === '政策数量') {
+                const currentCentralView = $('.central-btn a.active').text();
+                if (currentCentralView === '政策数量') {
                     updateBt01('全方位干预健康影响因素领域\n发文量（件）', 68, 100);
                     updateBt02('维护全生命周期健康领域\n发文量（件）', 74, 100);
                     updateBt03('防控重大疾病领域\n发文量（件）', 59, 100);
-                } else if (currentView === '政策质量') {
+                } else if (currentCentralView === '政策质量') {
                     updateBt01('当年完成率（%）', 84.06, 100);
                     updateBt02('总体完成率（%）', 92.75, 100);
                     updateBt03('平均发文月数（月）', 4.89, 12);
-                } else if (currentView === '政策网络') {
+                } else if (currentCentralView === '政策网络') {
                     updateBt01('参与部门数量（家）', 62, 100);
                     updateBt02('平均协作规模（家/件）', 2.66, 5);
                     updateBt03('联合发文率（%）', 41.56, 100);
