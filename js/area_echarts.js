@@ -29,11 +29,11 @@ $(function () {
         // 在 document.getElementById('map_1').appendChild(buttonContainer); 之后插入
         var yearContainer = document.createElement('div');
         yearContainer.style.position = 'absolute';
-        yearContainer.style.right = '10%';
-        yearContainer.style.top = '50px';
+        yearContainer.style.right = '42%';  // 改为固定像素
+        yearContainer.style.top = '20px';    // 改为固定像素
         yearContainer.style.zIndex = '1000';
         yearContainer.style.display = 'flex';
-        yearContainer.style.gap = 'min(2px, 0.4vw)';
+        yearContainer.style.gap = '8px';     // 改为固定像素
         document.getElementById('map_1').appendChild(yearContainer);
 
         // 创建年份按钮
@@ -41,39 +41,32 @@ $(function () {
             var btn = document.createElement('button');
             btn.innerText = year;
             btn.style.margin = '0';
-            btn.style.padding = 'min(7px, 0.7vw) min(14px, 1.2vw)';
+            btn.style.padding = '2px 4px';   // 改为更小的内边距
             btn.style.cursor = 'pointer';
-            btn.style.border = '1px solid #d9d9d9';
-            btn.style.borderRadius = 'min(4px, 0.5vw)';
-            btn.style.backgroundColor = year === currentYear ? '#1890ff' : 'transparent';
-            btn.style.color = year === currentYear ? 'white' : '#f0f0f0';
-            btn.style.fontSize = 'min(10px, 0.9vw)';
-            btn.style.whiteSpace = 'nowrap';
-            btn.style.transition = 'all 0.3s';
+            btn.style.border = 'none';       // 移除边框
+            btn.style.background = 'none';    // 移除背景
+            btn.style.color = year === currentYear ? '#1890ff' : '#999';  // 改变颜色方案
+            btn.style.fontSize = '12px';      // 固定字体大小
+            btn.style.transition = 'color 0.3s';
 
+            // 简化hover效果
             btn.onmouseover = function () {
                 if (year !== currentYear) {
-                    btn.style.borderColor = '#40a9ff';
                     btn.style.color = '#40a9ff';
                 }
             };
 
             btn.onmouseout = function () {
                 if (year !== currentYear) {
-                    btn.style.borderColor = '#d9d9d9';
-                    btn.style.color = '#f0f0f0';
+                    btn.style.color = '#999';
                 }
             };
 
             btn.onclick = function () {
                 yearContainer.querySelectorAll('button').forEach(b => {
-                    b.style.backgroundColor = 'transparent';
-                    b.style.color = '#f0f0f0';
-                    b.style.borderColor = '#d9d9d9';
+                    b.style.color = '#999';
                 });
-                btn.style.backgroundColor = '#1890ff';
-                btn.style.color = 'white';
-                btn.style.borderColor = '#1890ff';
+                btn.style.color = '#1890ff';
                 currentYear = year;
                 updateMapData(buttons.find(b => b.active).id);
             };
