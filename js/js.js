@@ -98,9 +98,40 @@ $(function () {
                 }
                 break;
             case 'action':
-                updateBt01('政策数量', 88.6);
-                updateBt02('政策质量', 92.1);
-                updateBt03('政策网络', 85.7);
+                const currentActionView = $('.action-btn a.active').text();
+                if (currentActionView === '2016') {
+                    updateBt01('政策数量', 88.6);
+                    updateBt02('政策质量', 92.1);
+                    updateBt03('政策网络', 85.7);
+                } else if (currentActionView === '2017') {
+                    updateBt01('政策数量', 92.1);
+                    updateBt02('政策质量', 95.4);
+                    updateBt03('政策网络', 90.3);
+                } else if (currentActionView === '2018') {
+                    updateBt01('政策数量', 92.1);
+                    updateBt02('政策质量', 95.4);
+                    updateBt03('政策网络', 90.3);
+                } else if (currentActionView === '2019') {
+                    updateBt01('政策数量', 92.1);
+                    updateBt02('政策质量', 95.4);
+                    updateBt03('政策网络', 90.3);
+                } else if (currentActionView === '2020') {
+                    updateBt01('政策数量', 92.1);
+                    updateBt02('政策质量', 95.4);
+                    updateBt03('政策网络', 90.3);
+                } else if (currentActionView === '2021') {
+                    updateBt01('政策数量', 92.1);
+                    updateBt02('政策质量', 95.4);
+                    updateBt03('政策网络', 90.3);
+                } else if (currentActionView === '2022') {
+                    updateBt01('政策数量', 92.1);
+                    updateBt02('政策质量', 95.4);
+                    updateBt03('政策网络', 90.3);
+                } else {
+                    updateBt01('政策数量', 71.2);
+                    updateBt02('政策质量', 69.9);
+                    updateBt03('政策网络', 73.4);
+                }
                 break;
             case 'central':
                 // 根据中央维度的当前选中状态来更新饼图
