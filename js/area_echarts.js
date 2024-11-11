@@ -11,6 +11,7 @@ $(function () {
             { id: 'coordination', text: '协同机制', active: false }
         ];
         // 在这里插入 (buttons数组定义之后)
+
         var years = ['2017', '2018', '2019', '2020', '2021', '2022', '2023'];
         var currentYear = '2023';
         // 创建按钮容器
@@ -1133,7 +1134,8 @@ $(function () {
                     padding: [5, 10],
                     textStyle: {
                         color: '#333'
-                    }
+                    },
+                    extraCssText: 'pointer-events: none;'  // 添加这一行
                 },
                 visualMap: {
                     type: 'continuous',
@@ -1192,88 +1194,7 @@ $(function () {
             myChart.setOption(option, true);
         }
 
-        var option = {
-            // title: {
-            //     text: '2023年全国各省份健康中国行动得分情况',
-            //     left: 'center',
-            //     top: 'top'
-            // },
-            tooltip: {
-                trigger: 'item',
-                confine: true,
-                position: function (point, params, dom, rect, size) {
-                    // 计算tooltip的理想位置，确保更居中
-                    return ['45%', '45%'];
-                },
-                formatter: params => {
-                    return `${params.name}<br/>${params.seriesName}：${params.value?.toFixed(2) || '暂无数据'}`;
-                },
-                backgroundColor: 'rgba(255, 255, 255, 0.7)', // 增加透明度
-                borderColor: '#ccc',
-                borderWidth: 1,
-                padding: [5, 10],
-                textStyle: {
-                    color: '#333'
-                }
-            },
-            visualMap: {
-                type: 'continuous',
-                min: 15,
-                max: 70,
-                text: ['高', '低'],
-                realtime: false,
-                calculable: true,
-                inRange: {
-                    color: ['#fff7bc', '#fec44f', '#ec7014', '#993404']
-                },
-                left: 'left',
-                top: 'bottom',
-                textStyle: {
-                    color: '#000'
-                },
-                formatter: value => value.toFixed(1)
-            },
-            geo: {
-                map: 'china',
-                roam: false,
-                center: [104.5, 35.5],
-                zoom: 1,
-                label: {
-                    show: true,
-                    fontSize: 8,
-                    color: '#000'
-                },
-                roam: false,
-                itemStyle: {
-                    borderColor: '#666',
-                    borderWidth: 0.5,
-                    areaColor: '#fff'
-                },
-                emphasis: {
-                    label: {
-                        show: true,
-                        color: '#fff'
-                    },
-                    itemStyle: {
-                        areaColor: '#ff9933'
-                    }
-                }
-            },
-            // 在初始化 option 中修改
-            series: [{
-                name: `${currentYear}年健康中国建设发展指数`,
-                type: 'map',
-                mapType: 'china',
-                roam: false,
-                data: mapData.totalScore[currentYear], // 修改这行
-                label: {
-                    show: true,
-                    fontSize: 8,
-                    color: '#000'
-                }
-            }]
-        };
-        myChart.setOption(option);
+        updateMapData('totalScore');
 
         // 监听地图的点击事件
         myChart.on('click', function (params) {
