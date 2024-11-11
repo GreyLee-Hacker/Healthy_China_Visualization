@@ -19,9 +19,9 @@ $(function () {
         // ... existing code ...
         var buttonContainer = document.createElement('div');
         buttonContainer.style.position = 'absolute';
-        buttonContainer.style.left = '44%';
+        buttonContainer.style.left = '43%';
         buttonContainer.style.transform = 'translateX(-50%)';
-        buttonContainer.style.top = '20px';
+        buttonContainer.style.top = '25px';
         buttonContainer.style.zIndex = '1000';
         buttonContainer.style.display = 'flex';
         buttonContainer.style.gap = 'min(2px, 0.2vw)';  // 响应式按钮间距
@@ -29,26 +29,29 @@ $(function () {
         // 在 document.getElementById('map_1').appendChild(buttonContainer); 之后插入
         var yearContainer = document.createElement('div');
         yearContainer.style.position = 'absolute';
-        yearContainer.style.right = '40%';  // 使用百分比定位
-        yearContainer.style.top = 'min(2px, 0.2vw)';    // 保持固定上边距
+        yearContainer.style.right = '43%';  // 使用百分比定位
+        yearContainer.style.top = 'min(1.5px, 0.2vw)';    // 保持固定上边距
         yearContainer.style.zIndex = '1000';
         yearContainer.style.display = 'flex';
         yearContainer.style.gap = 'min(2px, 0.2vw)';     // 保持固定间距
         document.getElementById('map_1').appendChild(yearContainer);
 
         // 创建年份按钮
+        // ... existing code ...
         years.forEach(year => {
             var btn = document.createElement('button');
             btn.innerText = year;
             btn.style.margin = '0';
-            btn.style.padding = '2px 4px';
+            btn.style.padding = '2px 4px';  // 修改这里
+            btn.style.paddingTop = '10px';  // 添加这行，增加上方内边距
+            btn.style.paddingBottom = '2px';  // 添加这行，保持下方内边距较小
             btn.style.cursor = 'pointer';
             btn.style.border = 'none';
             btn.style.background = 'none';
             btn.style.color = year === currentYear ? '#1890ff' : '#999';
-            btn.style.fontSize = 'min(12px, 1vw)';  // 使用响应式字体大小
+            btn.style.fontSize = 'min(12px, 1vw)';
             btn.style.transition = 'color 0.3s';
-            btn.style.whiteSpace = 'nowrap';  // 防止文字换行
+            btn.style.whiteSpace = 'nowrap';
 
             // hover效果
             btn.onmouseover = function () {
@@ -64,11 +67,14 @@ $(function () {
             };
 
             btn.onclick = function () {
+                // 更新所有年份按钮的样式
                 yearContainer.querySelectorAll('button').forEach(b => {
                     b.style.color = '#999';
                 });
+                // 设置当前选中年份的样式
                 btn.style.color = '#1890ff';
-                currentYear = year;
+                currentYear = year;  // 更新当前年份
+                // 更新地图数据
                 updateMapData(buttons.find(b => b.active).id);
             };
             yearContainer.appendChild(btn);
