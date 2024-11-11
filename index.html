@@ -286,10 +286,27 @@
             };
 
             // 更新评估指标
-            window.updateBt01('健康中国建设发展指数', value);
-            window.updateBt02('健康中国建设发展指数', value);
-            window.updateBt03('健康中国建设发展指数', value);
-
+            if (type === '健康中国建设发展指数') {
+              window.updateBt01("政策数量", value);
+              window.updateBt02("政策质量", value);
+              window.updateBt03("政策网络", value);
+            } else if (type === '政策数量') {
+              window.updateBt01("全方位干预健康影响因素领域\n发文量（件）", value);
+              window.updateBt02("维护全生命周期健康领域\n发文量（件）", value);
+              window.updateBt03("防控重大疾病领域\n发文量（件）", value);
+            } else if (type === '政策质量') {
+              window.updateBt01("当年完成率（%）", value);
+              window.updateBt02("总体完成率（%）", value);
+              window.updateBt03("平均完成月数（月）", value);
+            } else if (type === '政策网络') {
+              window.updateBt01("参与部门数量（家）", value);
+              window.updateBt02("平均协作规模（家/件）", value);
+              window.updateBt03("联合发文率（%）", value);
+            } else {
+              window.updateBt01(type, value);
+              window.updateBt02(type, value);
+              window.updateBt03(type, value);
+            }
             const yearData = data.find(item => item["年份"] === year);
             let content = `${year}<br/>`;
             content += `${params[0].seriesName}: ${params[0].value.toFixed(2)}<br/>`;
