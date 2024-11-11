@@ -20,6 +20,29 @@ $(function () {
     bt02()
     bt03()
 
+    $(document).ready(function () {
+        // 初始化行动维度图表
+        bt01 = echarts.init(document.getElementById('bt01'));
+        bt02 = echarts.init(document.getElementById('bt02'));
+        bt03 = echarts.init(document.getElementById('bt03'));
+
+        // 初始显示2016年数据
+        restorePieCharts();
+
+        // 监听窗口大小变化
+        window.addEventListener('resize', function () {
+            if (bt01) {
+                bt01.resize();
+            }
+            if (bt02) {
+                bt02.resize();
+            }
+            if (bt03) {
+                bt03.resize();
+            }
+        });
+    });
+
     // 添加所有维度的悬停事件监听
     $('#province-dimension').hover(
         function () {
