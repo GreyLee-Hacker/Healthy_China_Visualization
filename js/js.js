@@ -1,4 +1,10 @@
-﻿$(window).load(function () {
+﻿window.currentCentralHoveredData = {
+    year: null,
+    value: null,
+    type: null
+};
+
+$(window).load(function () {
     $(".loading").fadeOut()
 })
 

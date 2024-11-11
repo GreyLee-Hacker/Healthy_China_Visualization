@@ -276,8 +276,21 @@
           },
           formatter: function (params) {
             const year = params[0].name;
-            const yearData = data.find(item => item["年份"] === year);
+            const value = params[0].value;
 
+            // 更新全局变量
+            window.currentCentralHoveredData = {
+              year: year,
+              value: value,
+              type: type
+            };
+
+            // 更新评估指标
+            window.updateBt01('健康中国建设发展指数', value);
+            window.updateBt02('健康中国建设发展指数', value);
+            window.updateBt03('健康中国建设发展指数', value);
+
+            const yearData = data.find(item => item["年份"] === year);
             let content = `${year}<br/>`;
             content += `${params[0].seriesName}: ${params[0].value.toFixed(2)}<br/>`;
 
