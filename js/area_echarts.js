@@ -12,32 +12,32 @@ $(function () {
         ];
 
         // 创建按钮容器
+
+        // ... existing code ...
         var buttonContainer = document.createElement('div');
         buttonContainer.style.position = 'absolute';
-        buttonContainer.style.right = '400px';  // 从20px改为120px，将按钮组向左移动
-        buttonContainer.style.top = '60px';
+        buttonContainer.style.left = '44%';
+        buttonContainer.style.transform = 'translateX(-50%)';
+        buttonContainer.style.top = '50px';
         buttonContainer.style.zIndex = '1000';
+        buttonContainer.style.display = 'flex';
+        buttonContainer.style.gap = 'min(2px, 0.4vw)';  // 响应式按钮间距
         document.getElementById('map_1').appendChild(buttonContainer);
-
-        // 创建按钮
-        // ... existing code ...
-
-        // 创建按钮
-        // ... existing code ...
 
         // 创建按钮
         buttons.forEach(button => {
             var btn = document.createElement('button');
             btn.innerText = button.text;
-            btn.style.margin = '0 3px';
-            btn.style.padding = '2.5px 7px';
+            btn.style.margin = '0';
+            btn.style.padding = 'min(7px, 0.7vw) min(14px, 1.2vw)';  // 响应式内边距
             btn.style.cursor = 'pointer';
             btn.style.border = '1px solid #d9d9d9';
-            btn.style.borderRadius = '4px';
+            btn.style.borderRadius = 'min(4px, 0.5vw)';  // 响应式圆角
             btn.style.backgroundColor = button.active ? '#1890ff' : 'transparent';
-            btn.style.color = button.active ? 'white' : '#f0f0f0';  // 改为亮色
-            btn.style.fontSize = '14px';
-            btn.style.outline = 'none';
+            btn.style.color = button.active ? 'white' : '#f0f0f0';
+            btn.style.fontSize = 'min(10px, 0.9vw)';  // 响应式字体大小
+            btn.style.whiteSpace = 'nowrap';
+            btn.style.transition = 'all 0.3s';  // 平滑过渡效果
 
             btn.onmouseover = function () {
                 if (!button.active) {
@@ -49,14 +49,14 @@ $(function () {
             btn.onmouseout = function () {
                 if (!button.active) {
                     btn.style.borderColor = '#d9d9d9';
-                    btn.style.color = '#f0f0f0';  // 改为亮色
+                    btn.style.color = '#f0f0f0';
                 }
             };
 
             btn.onclick = function () {
                 buttonContainer.querySelectorAll('button').forEach(b => {
                     b.style.backgroundColor = 'transparent';
-                    b.style.color = '#f0f0f0';  // 改为亮色
+                    b.style.color = '#f0f0f0';
                     b.style.borderColor = '#d9d9d9';
                 });
                 btn.style.backgroundColor = '#1890ff';
@@ -67,6 +67,7 @@ $(function () {
             };
             buttonContainer.appendChild(btn);
         });
+        // ... existing code ...
 
         // ... rest of the code ...
 
@@ -209,18 +210,22 @@ $(function () {
         };
 
         function updateMapData(type) {
-
-            // 创建新的配置对象而不是获取当前配置
             var option = {
-                // title: {
-                //     text: `2023年全国各省份${buttons.find(b => b.id === type).text}情况`,
-                //     left: 'center',
-                //     top: 'top'
-                // },
                 tooltip: {
                     trigger: 'item',
+                    confine: true,
+                    position: function (point, params, dom, rect, size) {
+                        return ['45%', '45%'];
+                    },
                     formatter: params => {
                         return `${params.name}<br/>${params.seriesName}：${params.value?.toFixed(2) || '暂无数据'}`;
+                    },
+                    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                    borderColor: '#ccc',
+                    borderWidth: 1,
+                    padding: [5, 10],
+                    textStyle: {
+                        color: '#333'
                     }
                 },
                 visualMap: {
@@ -237,31 +242,6 @@ $(function () {
                     },
                     formatter: value => value.toFixed(1)
                 },
-                geo: {
-                    map: 'china',
-                    roam: false,
-                    center: [104.5, 35.5],
-                    zoom: 1,
-                    label: {
-                        show: true,
-                        fontSize: 8,
-                        color: '#000'
-                    },
-                    itemStyle: {
-                        borderColor: '#666',
-                        borderWidth: 0.5,
-                        areaColor: '#fff'
-                    },
-                    emphasis: {
-                        label: {
-                            show: true,
-                            color: '#fff'
-                        },
-                        itemStyle: {
-                            areaColor: '#ff9933'
-                        }
-                    }
-                },
                 series: [{
                     name: buttons.find(b => b.id === type).text,
                     type: 'map',
@@ -276,23 +256,27 @@ $(function () {
                 }]
             };
 
-            // 根据不同指标调整visualMap的范围
+            // 根据不同指标调整visualMap的范围和文本
             switch (type) {
                 case 'totalScore':
                     option.visualMap.min = 15;
                     option.visualMap.max = 60;
+                    option.visualMap.text = ['发展指数高', '发展指数低'];
                     break;
                 case 'policyCount':
-                    option.visualMap.min = 0;
-                    option.visualMap.max = 100;
+                    option.visualMap.min = 10;
+                    option.visualMap.max = 90;
+                    option.visualMap.text = ['政策数量多', '政策数量少'];
                     break;
                 case 'policyQuality':
-                    option.visualMap.min = 15;
-                    option.visualMap.max = 80;
+                    option.visualMap.min = 55;
+                    option.visualMap.max = 100;
+                    option.visualMap.text = ['政策质量高', '政策质量低'];
                     break;
                 case 'coordination':
-                    option.visualMap.min = 0;
-                    option.visualMap.max = 80;
+                    option.visualMap.min = 5;
+                    option.visualMap.max = 85;
+                    option.visualMap.text = ['协同程度高', '协同程度低'];
                     break;
             }
 
