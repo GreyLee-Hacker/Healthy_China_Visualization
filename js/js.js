@@ -20,6 +20,29 @@ $(function () {
     bt02()
     bt03()
 
+    $(document).ready(function () {
+        // 初始化行动维度图表
+        bt01 = echarts.init(document.getElementById('bt01'));
+        bt02 = echarts.init(document.getElementById('bt02'));
+        bt03 = echarts.init(document.getElementById('bt03'));
+
+        // 初始显示2016年数据
+        restorePieCharts();
+
+        // 监听窗口大小变化
+        window.addEventListener('resize', function () {
+            if (bt01) {
+                bt01.resize();
+            }
+            if (bt02) {
+                bt02.resize();
+            }
+            if (bt03) {
+                bt03.resize();
+            }
+        });
+    });
+
     // 添加所有维度的悬停事件监听
     $('#province-dimension').hover(
         function () {
@@ -74,27 +97,85 @@ $(function () {
                 updateBt03('政策网络', 65.8);
                 break;
             case 'department':
-                updateBt01('政策数量', 71.2);
-                updateBt02('政策质量', 68.9);
-                updateBt03('政策网络', 73.4);
+                const currentDepartmentView = $('.department-btn a.active').text();
+                if (currentDepartmentView === '2019') {
+                    updateBt01('政策数量', 71.2);
+                    updateBt02('政策质量', 68.9);
+                    updateBt03('政策网络', 73.4);
+                } else if (currentDepartmentView === '2020') {
+                    updateBt01('政策数量', 82.5);
+                    updateBt02('政策质量', 78.3);
+                    updateBt03('政策网络', 65.8);
+                } else if (currentDepartmentView === '2021') {
+                    updateBt01('政策数量', 88.6);
+                    updateBt02('政策质量', 92.1);
+                    updateBt03('政策网络', 85.7);
+                } else if (currentDepartmentView === '2022') {
+                    updateBt01('政策数量', 92.1);
+                    updateBt02('政策质量', 95.4);
+                    updateBt03('政策网络', 90.3);
+                } else if (currentDepartmentView === '2023') {
+                    updateBt01('政策数量', 100);
+                    updateBt02('政策质量', 100);
+                    updateBt03('政策网络', 100);
+                } else {
+                    updateBt01('政策数量', 0);
+                    updateBt02('政策质量', 0);
+                    updateBt03('政策网络', 0);
+                }
                 break;
             case 'action':
-                updateBt01('政策数量', 88.6);
-                updateBt02('政策质量', 92.1);
-                updateBt03('政策网络', 85.7);
+                const currentActionView = $('.action-btn a.active').text();
+                if (currentActionView === '2016') {
+                    updateBt01('政策数量', 65.5);
+                    updateBt02('政策质量', 68.3);
+                    updateBt03('政策网络', 63.8);
+                } else if (currentActionView === '2017') {
+                    updateBt01('政策数量', 70.2);
+                    updateBt02('政策质量', 72.7);
+                    updateBt03('政策网络', 67.9);
+                } else if (currentActionView === '2018') {
+                    updateBt01('政策数量', 75.6);
+                    updateBt02('政策质量', 77.8);
+                    updateBt03('政策网络', 72.5);
+                } else if (currentActionView === '2019') {
+                    updateBt01('政策数量', 80.5);
+                    updateBt02('政策质量', 82.2);
+                    updateBt03('政策网络', 77.4);
+                } else if (currentActionView === '2020') {
+                    updateBt01('政策数量', 85.8);
+                    updateBt02('政策质量', 87.3);
+                    updateBt03('政策网络', 82.7);
+                } else if (currentActionView === '2021') {
+                    updateBt01('政策数量', 91.2);
+                    updateBt02('政策质量', 92.5);
+                    updateBt03('政策网络', 87.9);
+                } else if (currentActionView === '2022') {
+                    updateBt01('政策数量', 96.4);
+                    updateBt02('政策质量', 97.6);
+                    updateBt03('政策网络', 93.9);
+                } else if (currentActionView === '2023') {
+                    updateBt01('政策数量', 100);
+                    updateBt02('政策质量', 100);
+                    updateBt03('政策网络', 100);
+                } else {
+                    updateBt01('政策数量', 0);
+                    updateBt02('政策质量', 0);
+                    updateBt03('政策网络', 0);
+                }
                 break;
             case 'central':
                 // 根据中央维度的当前选中状态来更新饼图
-                const currentView = $('.central-btn a.active').text();
-                if (currentView === '政策数量') {
+                const currentCentralView = $('.central-btn a.active').text();
+                if (currentCentralView === '政策数量') {
                     updateBt01('全方位干预健康影响因素领域\n发文量（件）', 68, 100);
                     updateBt02('维护全生命周期健康领域\n发文量（件）', 74, 100);
                     updateBt03('防控重大疾病领域\n发文量（件）', 59, 100);
-                } else if (currentView === '政策质量') {
+                } else if (currentCentralView === '政策质量') {
                     updateBt01('当年完成率（%）', 84.06, 100);
                     updateBt02('总体完成率（%）', 92.75, 100);
                     updateBt03('平均发文月数（月）', 4.89, 12);
-                } else if (currentView === '政策网络') {
+                } else if (currentCentralView === '政策网络') {
                     updateBt01('参与部门数量（家）', 62, 100);
                     updateBt02('平均协作规模（家/件）', 2.66, 5);
                     updateBt03('联合发文率（%）', 41.56, 100);

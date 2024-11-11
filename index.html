@@ -601,6 +601,32 @@
         departmentChart.clear();
         departmentChart.setOption(getDepartmentOption(year));
       }
+
+      if (year === '2019') {
+        window.updateBt01('政策数量', 71.2);
+        window.updateBt02('政策质量', 69.9);
+        window.updateBt03('政策网络', 73.4);
+      } else if (year === '2020') {
+        window.updateBt01('政策数量', 82.5);
+        window.updateBt02('政策质量', 78.3);
+        window.updateBt03('政策网络', 65.8);
+      } else if (year === '2021') {
+        window.updateBt01('政策数量', 88.6);
+        window.updateBt02('政策质量', 92.1);
+        window.updateBt03('政策网络', 85.7);
+      } else if (year === '2022') {
+        window.updateBt01('政策数量', 92.1);
+        window.updateBt02('政策质量', 95.4);
+        window.updateBt03('政策网络', 90.3);
+      } else if (year == '2023') {
+        window.updateBt01('政策数量', 100);
+        window.updateBt02('政策质量', 100);
+        window.updateBt03('政策网络', 100);
+      } else {
+        window.updateBt01('政策数量', 0);
+        window.updateBt02('政策质量', 0);
+        window.updateBt03('政策网络', 0);
+      }
     }
 
     // 将函数暴露到全局作用域
@@ -854,6 +880,44 @@
       if (actionChart) {
         actionChart.clear();
         actionChart.setOption(getActionOption(year));
+      }
+
+      if (year === '2016') {
+        window.updateBt01('政策数量', 65.5);
+        window.updateBt02('政策质量', 68.3);
+        window.updateBt03('政策网络', 63.8);
+      } else if (year === '2017') {
+        window.updateBt01('政策数量', 70.2);
+        window.updateBt02('政策质量', 72.7);
+        window.updateBt03('政策网络', 67.9);
+      } else if (year === '2018') {
+        window.updateBt01('政策数量', 75.6);
+        window.updateBt02('政策质量', 77.8);
+        window.updateBt03('政策网络', 72.5);
+      } else if (year === '2019') {
+        window.updateBt01('政策数量', 80.5);
+        window.updateBt02('政策质量', 82.2);
+        window.updateBt03('政策网络', 77.4);
+      } else if (year === '2020') {
+        window.updateBt01('政策数量', 85.8);
+        window.updateBt02('政策质量', 87.3);
+        window.updateBt03('政策网络', 82.7);
+      } else if (year === '2021') {
+        window.updateBt01('政策数量', 91.2);
+        window.updateBt02('政策质量', 92.5);
+        window.updateBt03('政策网络', 87.9);
+      } else if (year === '2022') {
+        window.updateBt01('政策数量', 96.4);
+        window.updateBt02('政策质量', 97.6);
+        window.updateBt03('政策网络', 93.9);
+      } else if (year === '2023') {
+        window.updateBt01('政策数量', 100);
+        window.updateBt02('政策质量', 100);
+        window.updateBt03('政策网络', 100);
+      } else {
+        window.updateBt01('政策数量', 0);
+        window.updateBt02('政策质量', 0);
+        window.updateBt03('政策网络', 0);
       }
     }
 
