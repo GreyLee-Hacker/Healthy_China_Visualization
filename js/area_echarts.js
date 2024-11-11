@@ -21,19 +21,19 @@ $(function () {
         buttonContainer.style.position = 'absolute';
         buttonContainer.style.left = '44%';
         buttonContainer.style.transform = 'translateX(-50%)';
-        buttonContainer.style.top = '50px';
+        buttonContainer.style.top = '20px';
         buttonContainer.style.zIndex = '1000';
         buttonContainer.style.display = 'flex';
-        buttonContainer.style.gap = 'min(2px, 0.4vw)';  // 响应式按钮间距
+        buttonContainer.style.gap = 'min(2px, 0.2vw)';  // 响应式按钮间距
         document.getElementById('map_1').appendChild(buttonContainer);
         // 在 document.getElementById('map_1').appendChild(buttonContainer); 之后插入
         var yearContainer = document.createElement('div');
         yearContainer.style.position = 'absolute';
-        yearContainer.style.right = '42%';  // 改为固定像素
-        yearContainer.style.top = '20px';    // 改为固定像素
+        yearContainer.style.right = '40%';  // 使用百分比定位
+        yearContainer.style.top = 'min(2px, 0.2vw)';    // 保持固定上边距
         yearContainer.style.zIndex = '1000';
         yearContainer.style.display = 'flex';
-        yearContainer.style.gap = '8px';     // 改为固定像素
+        yearContainer.style.gap = 'min(2px, 0.2vw)';     // 保持固定间距
         document.getElementById('map_1').appendChild(yearContainer);
 
         // 创建年份按钮
@@ -41,15 +41,16 @@ $(function () {
             var btn = document.createElement('button');
             btn.innerText = year;
             btn.style.margin = '0';
-            btn.style.padding = '2px 4px';   // 改为更小的内边距
+            btn.style.padding = '2px 4px';
             btn.style.cursor = 'pointer';
-            btn.style.border = 'none';       // 移除边框
-            btn.style.background = 'none';    // 移除背景
-            btn.style.color = year === currentYear ? '#1890ff' : '#999';  // 改变颜色方案
-            btn.style.fontSize = '12px';      // 固定字体大小
+            btn.style.border = 'none';
+            btn.style.background = 'none';
+            btn.style.color = year === currentYear ? '#1890ff' : '#999';
+            btn.style.fontSize = 'min(12px, 1vw)';  // 使用响应式字体大小
             btn.style.transition = 'color 0.3s';
+            btn.style.whiteSpace = 'nowrap';  // 防止文字换行
 
-            // 简化hover效果
+            // hover效果
             btn.onmouseover = function () {
                 if (year !== currentYear) {
                     btn.style.color = '#40a9ff';
@@ -79,7 +80,7 @@ $(function () {
             btn.style.margin = '0';
             btn.style.padding = 'min(7px, 0.7vw) min(14px, 1.2vw)';  // 响应式内边距
             btn.style.cursor = 'pointer';
-            btn.style.border = '1px solid #d9d9d9';
+            btn.style.border = 'none';
             btn.style.borderRadius = 'min(4px, 0.5vw)';  // 响应式圆角
             btn.style.backgroundColor = button.active ? '#1890ff' : 'transparent';
             btn.style.color = button.active ? 'white' : '#f0f0f0';
