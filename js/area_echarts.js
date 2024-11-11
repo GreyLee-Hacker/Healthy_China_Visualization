@@ -209,18 +209,22 @@ $(function () {
         };
 
         function updateMapData(type) {
-
-            // 创建新的配置对象而不是获取当前配置
             var option = {
-                // title: {
-                //     text: `2023年全国各省份${buttons.find(b => b.id === type).text}情况`,
-                //     left: 'center',
-                //     top: 'top'
-                // },
                 tooltip: {
                     trigger: 'item',
+                    confine: true,
+                    position: function (point, params, dom, rect, size) {
+                        return ['45%', '45%'];
+                    },
                     formatter: params => {
                         return `${params.name}<br/>${params.seriesName}：${params.value?.toFixed(2) || '暂无数据'}`;
+                    },
+                    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                    borderColor: '#ccc',
+                    borderWidth: 1,
+                    padding: [5, 10],
+                    textStyle: {
+                        color: '#333'
                     }
                 },
                 visualMap: {
@@ -237,31 +241,6 @@ $(function () {
                     },
                     formatter: value => value.toFixed(1)
                 },
-                geo: {
-                    map: 'china',
-                    roam: false,
-                    center: [104.5, 35.5],
-                    zoom: 1,
-                    label: {
-                        show: true,
-                        fontSize: 8,
-                        color: '#000'
-                    },
-                    itemStyle: {
-                        borderColor: '#666',
-                        borderWidth: 0.5,
-                        areaColor: '#fff'
-                    },
-                    emphasis: {
-                        label: {
-                            show: true,
-                            color: '#fff'
-                        },
-                        itemStyle: {
-                            areaColor: '#ff9933'
-                        }
-                    }
-                },
                 series: [{
                     name: buttons.find(b => b.id === type).text,
                     type: 'map',
@@ -276,23 +255,27 @@ $(function () {
                 }]
             };
 
-            // 根据不同指标调整visualMap的范围
+            // 根据不同指标调整visualMap的范围和文本
             switch (type) {
                 case 'totalScore':
                     option.visualMap.min = 15;
                     option.visualMap.max = 60;
+                    option.visualMap.text = ['发展指数高', '发展指数低'];
                     break;
                 case 'policyCount':
-                    option.visualMap.min = 0;
-                    option.visualMap.max = 100;
+                    option.visualMap.min = 10;
+                    option.visualMap.max = 90;
+                    option.visualMap.text = ['政策数量多', '政策数量少'];
                     break;
                 case 'policyQuality':
-                    option.visualMap.min = 15;
-                    option.visualMap.max = 80;
+                    option.visualMap.min = 55;
+                    option.visualMap.max = 100;
+                    option.visualMap.text = ['政策质量高', '政策质量低'];
                     break;
                 case 'coordination':
-                    option.visualMap.min = 0;
-                    option.visualMap.max = 80;
+                    option.visualMap.min = 5;
+                    option.visualMap.max = 85;
+                    option.visualMap.text = ['协同程度高', '协同程度低'];
                     break;
             }
 
