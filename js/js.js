@@ -104,9 +104,9 @@ $(function () {
     function updatePieCharts(dimension) {
         switch (dimension) {
             case 'province':
-                updateBt01('政策数量', 82.5);
-                updateBt02('政策质量', 78.3);
-                updateBt03('政策网络', 65.8);
+                updateBt01('政策数量', 0);
+                updateBt02('政策质量', 0);
+                updateBt03('政策网络', 0);
                 break;
             case 'department':
                 updateBt01('政策数量', 0);
