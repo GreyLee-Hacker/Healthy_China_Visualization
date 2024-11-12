@@ -3773,7 +3773,7 @@ $(function () {
                         } else if (type === 'policyQuality') {
                             updateBt01('当年完成率（%）', mapData["totalScore"][currentYear].find(item => item.name === params.name).当年完成率, 100);
                             updateBt02('总体完成率（%）', mapData["totalScore"][currentYear].find(item => item.name === params.name).总体完成率, 100);
-                            updateBt03('平均发文月数（月）', mapData["totalScore"][currentYear].find(item => item.name === params.name).平均完成月数, 12);
+                            updateBt03('平均发文月数（月）', mapData["totalScore"][currentYear].find(item => item.name === params.name).平均完成月数, 40);
                         } else if (type === 'coordination') {
                             updateBt01('参与部门数量（家）', mapData["totalScore"][currentYear].find(item => item.name === params.name).参与部门数量, 100);
                             updateBt02('平均协作规模（家/件）', mapData["totalScore"][currentYear].find(item => item.name === params.name).平均协作规模, 5);
