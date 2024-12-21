@@ -74,7 +74,7 @@ endLine: 74
 ## 使用说明
 
 ### 方法一
-访问网站[健康中国可视化系统]()
+访问网站[健康中国可视化系统](https://greylee-hacker.github.io/Healthy_China_Visualization/)
 
 ### 方法二
 1. 克隆项目到本地
